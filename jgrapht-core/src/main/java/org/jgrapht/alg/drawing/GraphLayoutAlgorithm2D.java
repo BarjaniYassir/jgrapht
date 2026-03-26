@@ -24,72 +24,72 @@ import java.util.function.*;
 
 /**
  * A base class for a 2d layout algorithm.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
-abstract class BaseLayoutAlgorithm2D<V, E>
+abstract class GraphLayoutAlgorithm2D<V, E>
     implements LayoutAlgorithm2D<V, E>
 {
     /**
      * A model initializer
      */
-    protected Function<V, Point2D> initializer;
+    protected Function<V, Point2D> vertexPositionInitializer;
 
     /**
      * Create a new layout algorithm
      */
-    public BaseLayoutAlgorithm2D()
+    public GraphLayoutAlgorithm2D()
     {
         this(null);
     }
 
     /**
      * Create a new layout algorithm with an initializer.
-     * 
+     *
      * @param initializer the initializer
      */
-    public BaseLayoutAlgorithm2D(Function<V, Point2D> initializer)
+    public GraphLayoutAlgorithm2D(Function<V, Point2D> initializer)
     {
-        this.initializer = initializer;
+        this.vertexPositionInitializer = initializer;
     }
 
     /**
      * Get the initializer
-     * 
+     *
      * @return the initializer
      */
-    public Function<V, Point2D> getInitializer()
+    public Function<V, Point2D> getVertexPositionInitializer()
     {
-        return initializer;
+        return vertexPositionInitializer;
     }
 
     /**
      * Set the initializer
-     * 
+     *
      * @param initializer the initializer
      */
-    public void setInitializer(Function<V, Point2D> initializer)
+    public void setVertexPositionInitializer(Function<V, Point2D> initializer)
     {
-        this.initializer = initializer;
+        this.vertexPositionInitializer = initializer;
     }
 
     /**
      * Initialize a model using the initializer.
-     * 
+     *
      * @param graph the graph
      * @param model the model
      */
     protected void init(Graph<V, E> graph, LayoutModel2D<V> model)
     {
-        Function<V, Point2D> initializer = getInitializer();
+        Function<V, Point2D> initializer = getVertexPositionInitializer();
         if (initializer != null) {
-            for (V v : graph.vertexSet()) {
-                Point2D value = initializer.apply(v);
-                if (value != null) {
-                    model.put(v, value);
+            for (V vertex : graph.vertexSet()) {
+                Point2D position = initializer.apply(vertex);
+                if (position != null) {
+                    model.put(vertex, position);
                 }
             }
         }

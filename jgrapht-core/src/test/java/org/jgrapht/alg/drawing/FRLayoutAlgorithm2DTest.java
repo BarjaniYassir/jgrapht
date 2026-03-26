@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test {@link FRLayoutAlgorithm2D}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class FRLayoutAlgorithm2DTest
@@ -74,7 +74,7 @@ public class FRLayoutAlgorithm2DTest
 
         // @formatter:off
         //  6        4
-        //   \      / 
+        //   \      /
         //    2 -- 1
         //   /      \
         //  5        3
@@ -129,7 +129,7 @@ public class FRLayoutAlgorithm2DTest
             }
             return Point2D.of(rng.nextDouble(), rng.nextDouble());
         };
-        alg.setInitializer(init);
+        alg.setVertexPositionInitializer(init);
 
         MapLayoutModel2D<String> model = new MapLayoutModel2D<>(Box2D.of(0d, 0d, 100d, 100d));
         alg.layout(graph, model);

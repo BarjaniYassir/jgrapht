@@ -24,14 +24,14 @@ import java.util.*;
 
 /**
  * Random layout. The algorithm assigns vertex coordinates uniformly at random.
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
 public class RandomLayoutAlgorithm2D<V, E>
-    extends BaseLayoutAlgorithm2D<V, E>
+    extends GraphLayoutAlgorithm2D<V, E>
 {
     private Random rng;
 
@@ -45,7 +45,7 @@ public class RandomLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param seed seed for the random number generator
      */
     public RandomLayoutAlgorithm2D(long seed)
@@ -55,7 +55,7 @@ public class RandomLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param rng the random number generator
      */
     public RandomLayoutAlgorithm2D(Random rng)
