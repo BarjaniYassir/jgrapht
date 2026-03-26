@@ -26,23 +26,23 @@ import java.util.function.*;
 
 /**
  * Fruchterman and Reingold Force-Directed Placement Algorithm.
- * 
+ *
  * The algorithm belongs in the broad category of
  * <a href="https://en.wikipedia.org/wiki/Force-directed_graph_drawing">force directed graph
  * drawing</a> algorithms and is described in the paper:
- * 
+ *
  * <ul>
  * <li>Thomas M. J. Fruchterman and Edward M. Reingold. Graph drawing by force-directed placement.
  * Software: Practice and experience, 21(11):1129--1164, 1991.</li>
  * </ul>
- * 
+ *
  * @author Dimitrios Michail
- * 
+ *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
 public class FRLayoutAlgorithm2D<V, E>
-    extends BaseLayoutAlgorithm2D<V, E>
+    extends GraphLayoutAlgorithm2D<V, E>
 {
     /**
      * Default number of iterations
@@ -71,7 +71,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      */
     public FRLayoutAlgorithm2D(int iterations)
@@ -81,7 +81,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param normalizationFactor normalization factor for the optimal distance
      */
@@ -92,7 +92,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param normalizationFactor normalization factor for the optimal distance
      * @param rng the random number generator
@@ -104,7 +104,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param normalizationFactor normalization factor for the optimal distance
      * @param rng the random number generator
@@ -127,7 +127,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param normalizationFactor normalization factor for the optimal distance
      * @param temperatureModelSupplier a simulated annealing temperature model supplier
@@ -145,7 +145,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param iterations number of iterations
      * @param normalizationFactor normalization factor for the optimal distance
      * @param temperatureModelSupplier a simulated annealing temperature model supplier
@@ -172,7 +172,7 @@ public class FRLayoutAlgorithm2D<V, E>
         double minX = drawableArea.getMinX();
         double minY = drawableArea.getMinY();
 
-        if (getInitializer() != null) {
+        if (getVertexPositionInitializer() != null) {
             // respect user initializer
             init(graph, model);
 
@@ -246,7 +246,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Calculate the attractive force.
-     * 
+     *
      * @param distance the distance
      * @return the force
      */
@@ -257,7 +257,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Calculate the repulsive force.
-     * 
+     *
      * @param distance the distance
      * @return the force
      */
@@ -268,7 +268,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Calculate the repulsive forces between vertices
-     * 
+     *
      * @param graph the graph
      * @param model the model
      * @return the displacement per vertex due to the repulsive forces
@@ -306,7 +306,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * Calculate the repulsive forces between vertices connected with edges.
-     * 
+     *
      * @param graph the graph
      * @param model the model
      * @return the displacement per vertex due to the attractive forces
@@ -340,7 +340,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
     /**
      * A general interface for a temperature model.
-     * 
+     *
      * <p>
      * The temperature should start from a high enough value and gradually become zero.
      */
@@ -349,7 +349,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
         /**
          * Return the temperature for the new iteration
-         * 
+         *
          * @param iteration the next iteration
          * @param maxIterations total number of iterations
          * @return the temperature for the next iteration
@@ -369,7 +369,7 @@ public class FRLayoutAlgorithm2D<V, E>
 
         /**
          * Create a new inverse linear temperature model.
-         * 
+         *
          * @param a a
          * @param b b
          */

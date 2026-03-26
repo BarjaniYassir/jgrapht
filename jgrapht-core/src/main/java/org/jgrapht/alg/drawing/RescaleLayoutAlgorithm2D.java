@@ -28,24 +28,24 @@ import org.jgrapht.alg.drawing.model.Point2D;
 /**
  * A layout algorithm which re-scales vertex positions to (center-scale,center+scale) in all
  * dimensions.
- * 
+ *
  * The algorithm first subtracts the mean on each axis separately, then all values are adjusted so
  * that the maximum magnitude becomes scale. The result is finally translated back to the old
  * center. This procedure preserves the aspect ratio.
- * 
+ *
  * @author Dimitrios Michail
  *
  * @param <V> the vertex type
  * @param <E> the edge type
  */
 public class RescaleLayoutAlgorithm2D<V, E>
-    extends BaseLayoutAlgorithm2D<V, E>
+    extends GraphLayoutAlgorithm2D<V, E>
 {
     private double scale;
 
     /**
      * Create a new layout algorithm
-     * 
+     *
      * @param scale the scale parameter
      */
     public RescaleLayoutAlgorithm2D(double scale)
