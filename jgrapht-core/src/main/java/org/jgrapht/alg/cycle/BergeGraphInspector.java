@@ -147,16 +147,20 @@ public class BergeGraphInspector<V, E>
         }
     }
 
+    private static final int MIN_DEGREE_FOR_PYRAMID = 2;
+    private static final int MIN_PATH_LENGTH = 3;
+    private static final int EVEN = 2;
+
     private void bfOddHoleCertificate(Graph<V, E> g)
     {
         for (V start : g.vertexSet()) {
-            if (g.degreeOf(start) < 2)
+            if (g.degreeOf(start) < MIN_DEGREE_FOR_PYRAMID)
                 continue;
             Set<V> set = new HashSet<>();
             set.addAll(g.vertexSet());
             for (V neighborOfStart : g.vertexSet()) {
                 if (neighborOfStart == start || !g.containsEdge(start, neighborOfStart)
-                    || g.degreeOf(neighborOfStart) != 2)
+                    || g.degreeOf(neighborOfStart) != MIN_DEGREE_FOR_PYRAMID)
                     continue;
                 set.remove(neighborOfStart);
                 Graph<V, E> subg = new AsSubgraph<>(g, set);
@@ -164,11 +168,11 @@ public class BergeGraphInspector<V, E>
                     if (neighborsNeighbor == start || neighborsNeighbor == neighborOfStart
                         || !g.containsEdge(neighborsNeighbor, neighborOfStart)
                         || g.containsEdge(neighborsNeighbor, start)
-                        || g.degreeOf(neighborsNeighbor) < 2)
+                        || g.degreeOf(neighborsNeighbor) < MIN_DEGREE_FOR_PYRAMID)
                         continue;
                     GraphPath<V, E> path =
                         new DijkstraShortestPath<>(subg).getPath(start, neighborsNeighbor);
-                    if (path == null || path.getLength() < 3 || path.getLength() % 2 == 0)
+                    if (path == null || path.getLength() < MIN_PATH_LENGTH || path.getLength() % EVEN == 0)
                         continue;
                     List<E> edgeList = new LinkedList<>();
                     edgeList.addAll(path.getEdgeList());
