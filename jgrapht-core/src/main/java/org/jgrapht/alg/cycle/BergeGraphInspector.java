@@ -101,53 +101,20 @@ public class BergeGraphInspector<V, E>
                     if (b3 == b1 || b3 == b2 || !g.containsEdge(b2, b3) || !g.containsEdge(b1, b3))
                         continue;
 
-                    // Triangle detected for the pyramid base
-                    Set<V> triangles = new HashSet<>();
-                    triangles.add(b1);
-                    triangles.add(b2);
-                    triangles.add(b3);
-                    if (visitedTriangles.contains(triangles)) {
-                        continue;
-                    }
-                    visitedTriangles.add(triangles);
+                    if (!isNewTriangle(visitedTriangles, b1, b2, b3)) continue;
 
                     for (V aCandidate : g.vertexSet()) {
-                        if (aCandidate == b1 || aCandidate == b2 || aCandidate == b3 ||
-                                // a is adjacent to at most one of b1,b2,b3
-                                g.containsEdge(aCandidate, b1) && g.containsEdge(aCandidate, b2)
-                                || g.containsEdge(aCandidate, b2) && g.containsEdge(aCandidate, b3)
-                                || g.containsEdge(aCandidate, b1) && g.containsEdge(aCandidate, b3))
-                        {
-                            continue;
-                        }
+                        if (!isValidTopCandidate(g, aCandidate, b1, b2, b3)) continue;
 
                         // aCandidate could now be the top of the pyramid
                         for (V s1 : g.vertexSet()) {
-                            if (s1 == aCandidate || !g.containsEdge(s1, aCandidate) || s1 == b2
-                                    || s1 == b3
-                                    || s1 != b1 && (g.containsEdge(s1, b2) || g.containsEdge(s1, b3)))
-                            {
-                                continue;
-                            }
+                            if (!isValidS(g, s1, aCandidate, b1, b2, b3, null, null)) continue;
 
                             for (V s2 : g.vertexSet()) {
-                                if (s2 == aCandidate || !g.containsEdge(s2, aCandidate)
-                                        || g.containsEdge(s1, s2) || s1 == s2 || s2 == b1 || s2 == b3
-                                        || s2 != b2
-                                        && (g.containsEdge(s2, b1) || g.containsEdge(s2, b3)))
-                                {
-                                    continue;
-                                }
+                                if (!isValidS(g, s2, aCandidate, b1, b2, b3, s1, null)) continue;
 
                                 for (V s3 : g.vertexSet()) {
-                                    if (s3 == aCandidate || !g.containsEdge(s3, aCandidate)
-                                            || g.containsEdge(s3, s2) || s1 == s3 || s3 == s2
-                                            || g.containsEdge(s1, s3) || s3 == b1 || s3 == b2
-                                            || s3 != b3
-                                            && (g.containsEdge(s3, b1) || g.containsEdge(s3, b2)))
-                                    {
-                                        continue;
-                                    }
+                                    if (!isValidS(g, s3, aCandidate, b1, b2, b3, s1, s2)) continue;
 
                                     // s1, s2, s3 could now be the closest vertices to the top
                                     // vertex of the pyramid
@@ -771,6 +738,48 @@ public class BergeGraphInspector<V, E>
         return certificate;
     }
 
+
+    /**
+     * Vérifie si le triangle n'a pas déjà été traité
+     */
+    private boolean isNewTriangle(Set<Set<V>> visitedTriangles, V b1, V b2, V b3) {
+        Set<V> triangles = new HashSet<>();
+        triangles.add(b1);
+        triangles.add(b2);
+        triangles.add(b3);
+
+        if (visitedTriangles.contains(triangles)) {
+            return false;
+        }
+
+        visitedTriangles.add(triangles);
+        return true;
+    }
+
+    /**
+     * Vérifie que le sommet aCandidate peut être le sommet de la pyramide
+     */
+    private boolean isValidTopCandidate(Graph<V, E> g, V a, V b1, V b2, V b3) {
+        if (a.equals(b1) || a.equals(b2) || a.equals(b3)) return false;
+        if ((g.containsEdge(a, b1) && g.containsEdge(a, b2)) ||
+                (g.containsEdge(a, b2) && g.containsEdge(a, b3)) ||
+                (g.containsEdge(a, b1) && g.containsEdge(a, b3))) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *  Vérifie si s1, s2, s3 sont des candidats valides pour les sommets proches du sommet de la pyramide
+     */
+    private boolean isValidS(Graph<V,E> g, V s, V a, V b1, V b2, V b3, V prev1, V prev2) {
+        if (s.equals(a)) return false;
+        if (!g.containsEdge(s, a)) return false;
+        if ((s.equals(b1) || s.equals(b2) || s.equals(b3))) return false;
+        if (prev1 != null && g.containsEdge(s, prev1)) return false;
+        if (prev2 != null && g.containsEdge(s, prev2)) return false;
+        return true;
+    }
 
     /**
      * Lists the vertices which are covered by two paths
