@@ -194,29 +194,36 @@ public class BergeGraphInspector<V, E>
                                     setM1.addAll(setM);
                                     setM1.add(b1);
                                     for (V m1 : setM1) {
-                                        GraphPath<V, E> pathP1 = p(
-                                                g, mapS1.get(m1), mapT1.get(m1), m1, b1, b2, b3, s1, s2,
-                                                s3);
-                                        if (pathP1 == null)
+                                        PyramidVertices<V> pv1 = new PyramidVertices<>(m1, s1, s2, s3, b1, b2, b3);
+                                        try {
+                                            GraphPath<V, E> pathP1 = p(
+                                                    g, mapS1.get(m1), mapT1.get(m1), pv1);
+                                        } catch (NoValidPyramidPathException e) {
                                             continue;
+                                        }
                                         Set<V> setM2 = new HashSet<>();
                                         setM2.addAll(setM);
                                         setM2.add(b2);
                                         for (V m2 : setM) {
-                                            GraphPath<V, E> pathP2 = p(
-                                                    g, mapS2.get(m2), mapT2.get(m2), m2, b2, b1, b3, s2,
-                                                    s1, s3);
-                                            if (pathP2 == null)
+                                            PyramidVertices<V> pv2 = new PyramidVertices<>(m2, s1, s2, s3, b1, b2, b3);
+                                            try {
+                                                GraphPath<V, E> pathP2 = p(
+                                                        g, mapS2.get(m2), mapT2.get(m2), pv2);
+                                            }
+                                            catch (NoValidPyramidPathException e){
                                                 continue;
+                                            }
                                             Set<V> setM3 = new HashSet<>();
                                             setM3.addAll(setM);
                                             setM3.add(b3);
                                             for (V m3 : setM3) {
-                                                GraphPath<V, E> pathP3 = p(
-                                                        g, mapS3.get(m3), mapT3.get(m3), m3, b3, b1, b2,
-                                                        s3, s1, s2);
-                                                if (pathP3 == null)
+                                                PyramidVertices<V> pv3 = new PyramidVertices<>(m3, s1, s2, s3, b1, b2, b3);
+                                                try {
+                                                    GraphPath<V, E> pathP3 = p(
+                                                            g, mapS3.get(m3), mapT3.get(m3), pv3);
+                                                } catch (NoValidPyramidPathException e){
                                                     continue;
+                                                }
                                                 if (certify) {
                                                     if ((pathP1.getLength() + pathP2.getLength())
                                                             % 2 == 0)
