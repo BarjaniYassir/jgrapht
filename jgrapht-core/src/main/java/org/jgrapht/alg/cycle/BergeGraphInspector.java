@@ -738,6 +738,11 @@ public class BergeGraphInspector<V, E>
         return certificate;
     }
 
+    public static class NoValidPyramidPathException extends Exception {
+        public NoValidPyramidPathException(String message) {
+            super(message);
+        }
+    }
 
     /**
      * Vérifie si le triangle n'a pas déjà été traité
@@ -825,14 +830,14 @@ public class BergeGraphInspector<V, E>
         }
     }
     private GraphPath<V, E> p(
-        Graph<V, E> g, GraphPath<V, E> pathS, GraphPath<V, E> pathT, PyramidVertices<V> pv )
+        Graph<V, E> g, GraphPath<V, E> pathS, GraphPath<V, E> pathT, PyramidVertices<V> pv )throws NoValidPyramidPathException
     {
         if (pv.s1 == pv.b1) {
             if (pv.b1 == pv.m) {
                 List<E> edgeList = new LinkedList<>();
                 return new GraphWalk<>(g, pv.s1, pv.b1, edgeList, 0);
             } else
-                return null;
+                throw new NoValidPyramidPathException("Chemin invalid");
         } else {
             if (pv.b1 == pv.m)
                 return null;
