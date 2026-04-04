@@ -33,31 +33,49 @@ import java.util.stream.Collectors;
 
 /**
  * <p>
- * Tests whether a graph is <a href="http://mathworld.wolfram.com/PerfectGraph.html">perfect</a>. A
- * perfect graph, also known as a Berge graph, is a graph $G$ such that for every induced subgraph
- * of $G$, the clique number $\chi(G)$ equals the chromatic number $\omega(G)$, i.e.,
- * $\omega(G)=\chi(G)$. Another characterization of perfect graphs is given by the Strong Perfect
- * Graph Theorem [M. Chudnovsky, N. Robertson, P. Seymour, R. Thomas. The strong perfect graph
- * theorem Annals of Mathematics, vol 164(1): pp. 51–230, 2006]: A graph $G$ is perfect if neither
- * $G$ nor its complement $\overline{G}$ have an odd hole. A hole in $G$ is an induced subgraph of
- * $G$ that is a cycle of length at least four, and it is odd or even if it has odd (or even,
+ * Tests whether a graph is
+ * <a href="http://mathworld.wolfram.com/PerfectGraph.html">perfect</a>. A
+ * perfect graph, also known as a Berge graph, is a graph $G$ such that for
+ * every induced subgraph
+ * of $G$, the clique number $\chi(G)$ equals the chromatic number $\omega(G)$,
+ * i.e.,
+ * $\omega(G)=\chi(G)$. Another characterization of perfect graphs is given by
+ * the Strong Perfect
+ * Graph Theorem [M. Chudnovsky, N. Robertson, P. Seymour, R. Thomas. The strong
+ * perfect graph
+ * theorem Annals of Mathematics, vol 164(1): pp. 51–230, 2006]: A graph $G$ is
+ * perfect if neither
+ * $G$ nor its complement $\overline{G}$ have an odd hole. A hole in $G$ is an
+ * induced subgraph of
+ * $G$ that is a cycle of length at least four, and it is odd or even if it has
+ * odd (or even,
  * respectively) length.
  * <p>
- * Some special <a href="http://graphclasses.org/classes/gc_56.html">classes</a> of graphs are are
- * known to be perfect, e.g. Bipartite graphs and Chordal graphs. Testing whether a graph is resp.
- * Bipartite or Chordal can be done efficiently using {@link GraphTests#isBipartite} or
+ * Some special <a href="http://graphclasses.org/classes/gc_56.html">classes</a>
+ * of graphs are are
+ * known to be perfect, e.g. Bipartite graphs and Chordal graphs. Testing
+ * whether a graph is resp.
+ * Bipartite or Chordal can be done efficiently using
+ * {@link GraphTests#isBipartite} or
  * {@link org.jgrapht.alg.cycle.ChordalityInspector}.
  * <p>
- * The implementation of this class is based on the paper: M. Chudnovsky, G. Cornuejols, X. Liu, P.
- * Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2): 143--186, 2003.
+ * The implementation of this class is based on the paper: M. Chudnovsky, G.
+ * Cornuejols, X. Liu, P.
+ * Seymour, and K. Vuskovic. Recognizing Berge Graphs. Combinatorica 25(2):
+ * 143--186, 2003.
  * <p>
  * Special Thanks to Maria Chudnovsky for her kind help.
  *
  * <p>
- * The runtime complexity of this implementation is $O(|V|^9|)$. This implementation is far more
- * efficient than simplistically testing whether graph $G$ or its complement $\overline{G}$ have an
- * odd cycle, because testing whether one graph can be found as an induced subgraph of another is
- * <a href="https://en.wikipedia.org/wiki/Induced_subgraph_isomorphism_problem">known</a> to be
+ * The runtime complexity of this implementation is $O(|V|^9|)$. This
+ * implementation is far more
+ * efficient than simplistically testing whether graph $G$ or its complement
+ * $\overline{G}$ have an
+ * odd cycle, because testing whether one graph can be found as an induced
+ * subgraph of another is
+ * <a href=
+ * "https://en.wikipedia.org/wiki/Induced_subgraph_isomorphism_problem">known</a>
+ * to be
  * NP-hard.
  *
  * @author Philipp S. Kaesgen (pkaesgen@freenet.de)
@@ -65,8 +83,7 @@ import java.util.stream.Collectors;
  * @param <V> the graph vertex type
  * @param <E> the graph edge type
  */
-public class BergeGraphInspector<V, E>
-{
+public class BergeGraphInspector<V, E> {
 
     private GraphPath<V, E> certificate = null;
     private boolean certify = false;
@@ -74,16 +91,15 @@ public class BergeGraphInspector<V, E>
     private static final int MIN_PATH_LENGTH = 3;
     private static final int EVEN = 2;
 
-
     /**
      * Checks whether a graph contains a pyramid. Running time: O(|V(g)|^9)
      *
      * @param g Graph
-     * @return Either it finds a pyramid (and hence an odd hole) in g, or it determines that g
+     * @return Either it finds a pyramid (and hence an odd hole) in g, or it
+     *         determines that g
      *         contains no pyramid
      */
-    boolean containsPyramid(Graph<V, E> g)
-    {
+    boolean containsPyramid(Graph<V, E> g) {
         /*
          * A pyramid looks like this:
          *
@@ -101,21 +117,25 @@ public class BergeGraphInspector<V, E>
                     if (b3 == b1 || b3 == b2 || !g.containsEdge(b2, b3) || !g.containsEdge(b1, b3))
                         continue;
 
-                    if (!isNewTriangle(visitedTriangles, b1, b2, b3)) continue;
+                    if (!isNewTriangle(visitedTriangles, b1, b2, b3))
+                        continue;
 
                     for (V aCandidate : g.vertexSet()) {
-                        if (!isValidTopCandidate(g, aCandidate, b1, b2, b3)) continue;
+                        if (!isValidTopCandidate(g, aCandidate, b1, b2, b3))
+                            continue;
 
                         // aCandidate could now be the top of the pyramid
                         for (V s1 : g.vertexSet()) {
-                            if (!isValidS(g, s1, aCandidate, b1, b2, b3, null, null)) continue;
+                            if (!isValidS(g, s1, aCandidate, b1, b2, b3, null, null))
+                                continue;
 
                             for (V s2 : g.vertexSet()) {
-                                if (!isValidS(g, s2, aCandidate, b1, b2, b3, s1, null)) continue;
+                                if (!isValidS(g, s2, aCandidate, b2, b1, b3, s1, null))
+                                    continue;
 
                                 for (V s3 : g.vertexSet()) {
-                                    if (!isValidS(g, s3, aCandidate, b1, b2, b3, s1, s2)) continue;
-
+                                    if (!isValidS(g, s3, aCandidate, b3, b1, b2, s1, s2))
+                                        continue;
                                     // s1, s2, s3 could now be the closest vertices to the top
                                     // vertex of the pyramid
                                     Set<V> setM = new HashSet<>();
@@ -150,7 +170,6 @@ public class BergeGraphInspector<V, E>
                                         subg = new AsSubgraph<>(g, validInterior);
                                         mapT1.put(
                                                 m1, new DijkstraShortestPath<>(subg).getPath(b1, m1));
-
                                     }
                                     for (V m2 : setM) {
                                         Set<V> validInterior = new HashSet<>();
@@ -168,7 +187,6 @@ public class BergeGraphInspector<V, E>
                                         subg = new AsSubgraph<>(g, validInterior);
                                         mapT2.put(
                                                 m2, new DijkstraShortestPath<>(subg).getPath(b2, m2));
-
                                     }
                                     for (V m3 : setM) {
                                         Set<V> validInterior = new HashSet<>();
@@ -194,9 +212,10 @@ public class BergeGraphInspector<V, E>
                                     setM1.addAll(setM);
                                     setM1.add(b1);
                                     for (V m1 : setM1) {
-                                        PyramidVertices<V> pv1 = new PyramidVertices<>(m1, s1, s2, s3, b1, b2, b3);
+                                        PyramidVertices<V> pv1 = new PyramidVertices<>(m1, b1, b2, b3, s1, s2, s3);
+                                        GraphPath<V, E> pathP1;
                                         try {
-                                            GraphPath<V, E> pathP1 = p(
+                                            pathP1 = p(
                                                     g, mapS1.get(m1), mapT1.get(m1), pv1);
                                         } catch (NoValidPyramidPathException e) {
                                             continue;
@@ -205,55 +224,51 @@ public class BergeGraphInspector<V, E>
                                         setM2.addAll(setM);
                                         setM2.add(b2);
                                         for (V m2 : setM) {
-                                            PyramidVertices<V> pv2 = new PyramidVertices<>(m2, s1, s2, s3, b1, b2, b3);
+                                            PyramidVertices<V> pv2 = new PyramidVertices<>(m2, b2, b1, b3, s2, s1, s3);
+                                            GraphPath<V, E> pathP2;
                                             try {
-                                                GraphPath<V, E> pathP2 = p(
+                                                pathP2 = p(
                                                         g, mapS2.get(m2), mapT2.get(m2), pv2);
-                                            }
-                                            catch (NoValidPyramidPathException e){
+                                            } catch (NoValidPyramidPathException e) {
                                                 continue;
                                             }
                                             Set<V> setM3 = new HashSet<>();
                                             setM3.addAll(setM);
                                             setM3.add(b3);
                                             for (V m3 : setM3) {
-                                                PyramidVertices<V> pv3 = new PyramidVertices<>(m3, s1, s2, s3, b1, b2, b3);
+                                                PyramidVertices<V> pv3 = new PyramidVertices<>(m3, b3, b1, b2, s3, s1,
+                                                        s2);
+                                                GraphPath<V, E> pathP3;
                                                 try {
-                                                    GraphPath<V, E> pathP3 = p(
+                                                    pathP3 = p(
                                                             g, mapS3.get(m3), mapT3.get(m3), pv3);
-                                                } catch (NoValidPyramidPathException e){
+                                                } catch (NoValidPyramidPathException e) {
                                                     continue;
                                                 }
                                                 if (certify) {
-                                                    if ((pathP1.getLength() + pathP2.getLength())
-                                                            % 2 == 0)
-                                                    {
+                                                    if (pathP1 != null && pathP2 != null
+                                                            && (pathP1.getLength() + pathP2.getLength()) % 2 == 0) {
                                                         Set<V> set = new HashSet<>();
                                                         set.addAll(pathP1.getVertexList());
                                                         set.addAll(pathP2.getVertexList());
                                                         set.add(aCandidate);
-                                                        bfOddHoleCertificate(
-                                                                new AsSubgraph<>(g, set));
-                                                    } else if ((pathP1.getLength()
-                                                            + pathP3.getLength()) % 2 == 0)
-                                                    {
+                                                        bfOddHoleCertificate(new AsSubgraph<>(g, set));
+                                                    } else if (pathP1 != null && pathP3 != null
+                                                            && (pathP1.getLength() + pathP3.getLength()) % 2 == 0) {
                                                         Set<V> set = new HashSet<>();
                                                         set.addAll(pathP1.getVertexList());
                                                         set.addAll(pathP3.getVertexList());
                                                         set.add(aCandidate);
-                                                        bfOddHoleCertificate(
-                                                                new AsSubgraph<>(g, set));
+                                                        bfOddHoleCertificate(new AsSubgraph<>(g, set));
                                                     } else {
                                                         Set<V> set = new HashSet<>();
                                                         set.addAll(pathP3.getVertexList());
                                                         set.addAll(pathP2.getVertexList());
                                                         set.add(aCandidate);
-                                                        bfOddHoleCertificate(
-                                                                new AsSubgraph<>(g, set));
+                                                        bfOddHoleCertificate(new AsSubgraph<>(g, set));
                                                     }
                                                 }
                                                 return true;
-
                                             }
 
                                         }
@@ -270,7 +285,6 @@ public class BergeGraphInspector<V, E>
                 }
             }
         }
-
         return false;
     }
 
@@ -280,8 +294,7 @@ public class BergeGraphInspector<V, E>
      * @param g Graph
      * @return Decides whether there is a jewel in g
      */
-    boolean containsJewel(Graph<V, E> g)
-    {
+    boolean containsJewel(Graph<V, E> g) {
         for (V v2 : g.vertexSet()) {
             for (V v3 : g.vertexSet()) {
                 if (v2 == v3 || !g.containsEdge(v2, v3))
@@ -343,8 +356,7 @@ public class BergeGraphInspector<V, E>
 
                                         }
 
-                                        double weight =
-                                                edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
+                                        double weight = edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                                         certificate = new GraphWalk<>(g, v1, v1, edgeList, weight);
                                     }
                                     return true;
@@ -360,13 +372,13 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     * Checks whether a graph contains a clean shortest odd hole. Running time: O(|V(g)|^4)
+     * Checks whether a graph contains a clean shortest odd hole. Running time:
+     * O(|V(g)|^4)
      *
      * @param g Graph containing no pyramid or jewel
      * @return Decides whether g contains a clean shortest odd hole
      */
-    boolean containsCleanShortestOddHole(Graph<V, E> g)
-    {
+    boolean containsCleanShortestOddHole(Graph<V, E> g) {
         /*
          * Find 3 Paths which are an uneven odd hole when conjunct
          */
@@ -419,27 +431,29 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     * A vertex y is X-complete if y contained in V(g)\X is adjacent to every vertex in X.
+     * A vertex y is X-complete if y contained in V(g)\X is adjacent to every vertex
+     * in X.
      *
      * @param g A Graph
      * @param y Vertex whose X-completeness is to assess
      * @param x Set of vertices
      * @return whether y is X-complete
      */
-    boolean isYXComplete(Graph<V, E> g, V y, Set<V> x)
-    {
+    boolean isYXComplete(Graph<V, E> g, V y, Set<V> x) {
         return x.stream().allMatch(t -> g.containsEdge(t, y));
     }
 
     /**
      * <p>
-     * Checks whether a graph is of configuration type T2. A configuration of type T2 in g is a
+     * Checks whether a graph is of configuration type T2. A configuration of type
+     * T2 in g is a
      * sequence v1,v2,v3,v4,P,X such that:
      * </p>
      * <ul>
      * <li>v1-v2-v3-v4 is a path of g</li>
      * <li>X is an anticomponent of the set of all {v1,v2,v4}-complete vertices</li>
-     * <li>P is a path in G\(X+{v2,v3}) between v1,v4, and no vertex in P*, i.e. P's interior, is
+     * <li>P is a path in G\(X+{v2,v3}) between v1,v4, and no vertex in P*, i.e. P's
+     * interior, is
      * X-complete or adjacent to v2 or adjacent to v3</li>
      * </ul>
      * An example is the complement graph of a cycle-7-graph
@@ -447,8 +461,7 @@ public class BergeGraphInspector<V, E>
      * @param g A Graph
      * @return whether g contains a configuration of Type T2
      */
-    boolean hasConfigurationType2(Graph<V, E> g)
-    {
+    boolean hasConfigurationType2(Graph<V, E> g) {
         for (V v1 : g.vertexSet()) {
             for (V v2 : g.vertexSet()) {
                 if (v1 == v2 || !g.containsEdge(v1, v2))
@@ -483,9 +496,8 @@ public class BergeGraphInspector<V, E>
                             if (!v2v3.contains(v1) || !v2v3.contains(v4))
                                 continue;
 
-                            GraphPath<V, E> path =
-                                    new DijkstraShortestPath<>(new AsSubgraph<>(g, v2v3))
-                                            .getPath(v1, v4);
+                            GraphPath<V, E> path = new DijkstraShortestPath<>(new AsSubgraph<>(g, v2v3))
+                                    .getPath(v1, v4);
                             if (path == null)
                                 continue;
                             List<V> listP = path.getVertexList();
@@ -495,8 +507,7 @@ public class BergeGraphInspector<V, E>
                             boolean cont = true;
                             for (V p : listP) {
                                 if (p != v1 && p != v4 && (g.containsEdge(p, v2)
-                                        || g.containsEdge(p, v3) || isYXComplete(g, p, setX)))
-                                {
+                                        || g.containsEdge(p, v3) || isYXComplete(g, p, setX))) {
                                     cont = false;
                                     break;
                                 }
@@ -516,8 +527,7 @@ public class BergeGraphInspector<V, E>
                                         edgeList.add(g.getEdge(x, v1));
                                     }
 
-                                    double weight =
-                                            edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
+                                    double weight = edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                                     certificate = new GraphWalk<>(g, v1, v1, edgeList, weight);
                                 }
                                 return true;
@@ -533,16 +543,20 @@ public class BergeGraphInspector<V, E>
 
     /**
      * <p>
-     * Checks whether a graph is of configuration type T3. A configuration of type T3 in g is a
+     * Checks whether a graph is of configuration type T3. A configuration of type
+     * T3 in g is a
      * sequence v1,...,v6,P,X such that
      * </p>
      * <ul>
      * <li>v1,...,v6 are distinct vertices of g</li>
-     * <li>v1v2,v3v4,v2v3,v3v5,v4v6 are edges, and v1v3,v2v4,v1v5,v2v5,v1v6,v2v6,v4v5 are
+     * <li>v1v2,v3v4,v2v3,v3v5,v4v6 are edges, and
+     * v1v3,v2v4,v1v5,v2v5,v1v6,v2v6,v4v5 are
      * non-edges</li>
-     * <li>X is an anticomponent of the set of all {v1,v2,v5}-complete vertices, and v3,v4 are not
+     * <li>X is an anticomponent of the set of all {v1,v2,v5}-complete vertices, and
+     * v3,v4 are not
      * X-complete</li>
-     * <li>P is a path of g\(X+{v1,v2,v3,v4}) between v5,v6, and no vertex in P* is X-complete or
+     * <li>P is a path of g\(X+{v1,v2,v3,v4}) between v5,v6, and no vertex in P* is
+     * X-complete or
      * adjacent to v1 or adjacent to v2</li>
      * <li>if v5v6 is an edge then v6 is not X-complete</li>
      * </ul>
@@ -550,8 +564,7 @@ public class BergeGraphInspector<V, E>
      * @param g A Graph
      * @return whether g contains a configuration of Type T3
      */
-    boolean hasConfigurationType3(Graph<V, E> g)
-    {
+    boolean hasConfigurationType3(Graph<V, E> g) {
         for (V v1 : g.vertexSet()) {
             for (V v2 : g.vertexSet()) {
                 if (v1 == v2 || !g.containsEdge(v1, v2))
@@ -610,14 +623,12 @@ public class BergeGraphInspector<V, E>
                                     verticesForPv5v6.remove(v4);
 
                                     if (new ConnectivityInspector<>(
-                                            new AsSubgraph<>(g, verticesForPv5v6)).pathExists(v6, v5))
-                                    {
+                                            new AsSubgraph<>(g, verticesForPv5v6)).pathExists(v6, v5)) {
                                         if (certify) {
                                             List<E> edgeList = new LinkedList<>();
                                             edgeList.add(g.getEdge(v1, v4));
                                             edgeList.add(g.getEdge(v4, v6));
-                                            GraphPath<V, E> path =
-                                                    new DijkstraShortestPath<>(g).getPath(v6, v5);
+                                            GraphPath<V, E> path = new DijkstraShortestPath<>(g).getPath(v6, v5);
                                             edgeList.addAll(path.getEdgeList());
                                             if (path.getLength() % 2 == 1) {
                                                 V x = setX.iterator().next();
@@ -631,8 +642,7 @@ public class BergeGraphInspector<V, E>
 
                                             double weight = edgeList
                                                     .stream().mapToDouble(g::getEdgeWeight).sum();
-                                            certificate =
-                                                    new GraphWalk<>(g, v1, v1, edgeList, weight);
+                                            certificate = new GraphWalk<>(g, v1, v1, edgeList, weight);
                                         }
                                         return true;
                                     }
@@ -652,26 +662,34 @@ public class BergeGraphInspector<V, E>
     /**
      * Performs the Berge Recognition Algorithm.
      * <p>
-     * First this algorithm is used to test whether $G$ or its complement contain a jewel, a pyramid
-     * or a configuration of type 1, 2 or 3. If so, it is output that $G$ is not Berge. If not, then
-     * every shortest odd hole in $G$ is amenable. This asserted, the near-cleaner subsets of $V(G)$
-     * are determined. For each of them in turn it is checked, if this subset is a near-cleaner and,
-     * thus, if there is an odd hole. If an odd hole is found, this checker will output that $G$ is
-     * not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
-     * and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
+     * First this algorithm is used to test whether $G$ or its complement contain a
+     * jewel, a pyramid
+     * or a configuration of type 1, 2 or 3. If so, it is output that $G$ is not
+     * Berge. If not, then
+     * every shortest odd hole in $G$ is amenable. This asserted, the near-cleaner
+     * subsets of $V(G)$
+     * are determined. For each of them in turn it is checked, if this subset is a
+     * near-cleaner and,
+     * thus, if there is an odd hole. If an odd hole is found, this checker will
+     * output that $G$ is
+     * not Berge. If no odd hole is found, all near-cleaners for the complement
+     * graph are determined
+     * and it will be proceeded as before. If again no odd hole is detected, $G$ is
+     * Berge.
      *
      * <p>
-     * A certificate can be obtained through the {@link BergeGraphInspector#getCertificate} method,
+     * A certificate can be obtained through the
+     * {@link BergeGraphInspector#getCertificate} method,
      * if {@code computeCertificate} is {@code true}.
      * <p>
-     * Running this method takes $O(|V|^9)$, and computing the certificate takes $O(|V|^5)$.
+     * Running this method takes $O(|V|^9)$, and computing the certificate takes
+     * $O(|V|^5)$.
      *
-     * @param g A graph
+     * @param g                  A graph
      * @param computeCertificate toggles certificate computation
      * @return whether g is Berge and, thus, perfect
      */
-    public boolean isBerge(Graph<V, E> g, boolean computeCertificate)
-    {
+    public boolean isBerge(Graph<V, E> g, boolean computeCertificate) {
         GraphTests.requireDirectedOrUndirected(g);
         Graph<V, E> complementGraph;
         if (g.getType().isSimple())
@@ -709,16 +727,24 @@ public class BergeGraphInspector<V, E>
     /**
      * Performs the Berge Recognition Algorithm.
      * <p>
-     * First this algorithm is used to test whether $G$ or its complement contain a jewel, a pyramid
-     * or a configuration of type 1, 2 or 3. If so, it is output that $G$ is not Berge. If not, then
-     * every shortest odd hole in $G$ is amenable. This asserted, the near-cleaner subsets of $V(G)$
-     * are determined. For each of them in turn it is checked, if this subset is a near-cleaner and,
-     * thus, if there is an odd hole. If an odd hole is found, this checker will output that $G$ is
-     * not Berge. If no odd hole is found, all near-cleaners for the complement graph are determined
-     * and it will be proceeded as before. If again no odd hole is detected, $G$ is Berge.
+     * First this algorithm is used to test whether $G$ or its complement contain a
+     * jewel, a pyramid
+     * or a configuration of type 1, 2 or 3. If so, it is output that $G$ is not
+     * Berge. If not, then
+     * every shortest odd hole in $G$ is amenable. This asserted, the near-cleaner
+     * subsets of $V(G)$
+     * are determined. For each of them in turn it is checked, if this subset is a
+     * near-cleaner and,
+     * thus, if there is an odd hole. If an odd hole is found, this checker will
+     * output that $G$ is
+     * not Berge. If no odd hole is found, all near-cleaners for the complement
+     * graph are determined
+     * and it will be proceeded as before. If again no odd hole is detected, $G$ is
+     * Berge.
      *
      * <p>
-     * This method by default does not compute a certificate. For obtaining a certificate, call
+     * This method by default does not compute a certificate. For obtaining a
+     * certificate, call
      * {@link BergeGraphInspector#isBerge} with {@code computeCertificate=true}.
      * <p>
      * Running this method takes $O(|V|^9)$.
@@ -726,22 +752,25 @@ public class BergeGraphInspector<V, E>
      * @param g A graph
      * @return whether g is Berge and, thus, perfect
      */
-    public boolean isBerge(Graph<V, E> g)
-    {
+    public boolean isBerge(Graph<V, E> g) {
         return this.isBerge(g, false);
     }
 
     /**
-     * Returns the certificate in the form of a hole or anti-hole in the inspected graph, when the
+     * Returns the certificate in the form of a hole or anti-hole in the inspected
+     * graph, when the
      * {@link BergeGraphInspector#isBerge} method is previously called with
-     * {@code computeCertificate=true}. Returns null if the inspected graph is perfect.
+     * {@code computeCertificate=true}. Returns null if the inspected graph is
+     * perfect.
      *
-     * @return a <a href="http://graphclasses.org/smallgraphs.html#holes">hole</a> or
-     *         <a href="http://graphclasses.org/smallgraphs.html#antiholes">anti-hole</a> in the
+     * @return a <a href="http://graphclasses.org/smallgraphs.html#holes">hole</a>
+     *         or
+     *         <a href=
+     *         "http://graphclasses.org/smallgraphs.html#antiholes">anti-hole</a> in
+     *         the
      *         inspected graph, null if the graph is perfect
      */
-    public GraphPath<V, E> getCertificate()
-    {
+    public GraphPath<V, E> getCertificate() {
         return certificate;
     }
 
@@ -763,7 +792,6 @@ public class BergeGraphInspector<V, E>
         if (visitedTriangles.contains(triangles)) {
             return false;
         }
-
         visitedTriangles.add(triangles);
         return true;
     }
@@ -772,7 +800,9 @@ public class BergeGraphInspector<V, E>
      * Vérifie que le sommet aCandidate peut être le sommet de la pyramide
      */
     private boolean isValidTopCandidate(Graph<V, E> g, V a, V b1, V b2, V b3) {
-        if (a.equals(b1) || a.equals(b2) || a.equals(b3)) return false;
+        if (a.equals(b1) || a.equals(b2) || a.equals(b3)) {
+            return false;
+        }
         if ((g.containsEdge(a, b1) && g.containsEdge(a, b2)) ||
                 (g.containsEdge(a, b2) && g.containsEdge(a, b3)) ||
                 (g.containsEdge(a, b1) && g.containsEdge(a, b3))) {
@@ -782,14 +812,28 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     *  Vérifie si s1, s2, s3 sont des candidats valides pour les sommets proches du sommet de la pyramide
+     * Vérifie si s1, s2, s3 sont des candidats valides pour les sommets proches du
+     * sommet de la pyramide
      */
-    private boolean isValidS(Graph<V,E> g, V s, V a, V b1, V b2, V b3, V prev1, V prev2) {
-        if (s.equals(a)) return false;
-        if (!g.containsEdge(s, a)) return false;
-        if ((s.equals(b1) || s.equals(b2) || s.equals(b3))) return false;
-        if (prev1 != null && g.containsEdge(s, prev1)) return false;
-        if (prev2 != null && g.containsEdge(s, prev2)) return false;
+    private boolean isValidS(Graph<V, E> g, V s, V a, V b1, V b2, V b3, V prev1, V prev2) {
+        if (s.equals(a)) {
+            return false;
+        }
+        if (!g.containsEdge(s, a)) {
+            return false;
+        }
+        if (s.equals(b1) || s.equals(b2) || s.equals(b3)) {
+            return false;
+        }
+        if (!s.equals(b1) && (g.containsEdge(s, b2) || g.containsEdge(s, b3))) {
+            return false;
+        }
+        if (prev1 != null && (s.equals(prev1) || g.containsEdge(s, prev1))) {
+            return false;
+        }
+        if (prev2 != null && (s.equals(prev2) || g.containsEdge(s, prev2))) {
+            return false;
+        }
         return true;
     }
 
@@ -800,8 +844,7 @@ public class BergeGraphInspector<V, E>
      * @param p2 A Path in g
      * @return Set of vertices covered by both p1 and p2
      */
-    private List<V> intersectGraphPaths(GraphPath<V, E> p1, GraphPath<V, E> p2)
-    {
+    private List<V> intersectGraphPaths(GraphPath<V, E> p1, GraphPath<V, E> p2) {
         List<V> res = new LinkedList<>();
         res.addAll(p1.getVertexList());
         res.retainAll(p2.getVertexList());
@@ -811,19 +854,19 @@ public class BergeGraphInspector<V, E>
     /**
      * Assembles a GraphPath of the Paths S and T. Required for the Pyramid Checker
      *
-     * @param g A Graph
+     * @param g     A Graph
      * @param pathS A Path in g
      * @param pathT A Path in g
-     * @param m A vertex
-     * @param b1 A base vertex
-     * @param b2 A base vertex
-     * @param b3 A base vertex
-     * @param s1 A vertex
-     * @param s2 A vertex
+     * @param m     A vertex
+     * @param b1    A base vertex
+     * @param b2    A base vertex
+     * @param b3    A base vertex
+     * @param s1    A vertex
+     * @param s2    A vertex
      * @return The conjunct path of S and T
      */
 
-    static class PyramidVertices<V>{
+    static class PyramidVertices<V> {
         V m, b1, b2, b3, s1, s2, s3;
 
         PyramidVertices(V m, V b1, V b2, V b3, V s1, V s2, V s3) {
@@ -836,35 +879,39 @@ public class BergeGraphInspector<V, E>
             this.s3 = s3;
         }
     }
+
     private GraphPath<V, E> p(
-        Graph<V, E> g, GraphPath<V, E> pathS, GraphPath<V, E> pathT, PyramidVertices<V> pv )throws NoValidPyramidPathException
-    {
+            Graph<V, E> g, GraphPath<V, E> pathS, GraphPath<V, E> pathT, PyramidVertices<V> pv)
+            throws NoValidPyramidPathException {
+
         if (pv.s1 == pv.b1) {
             if (pv.b1 == pv.m) {
                 List<E> edgeList = new LinkedList<>();
                 return new GraphWalk<>(g, pv.s1, pv.b1, edgeList, 0);
             } else
-                throw new NoValidPyramidPathException("Chemin invalid");
+                throw new NoValidPyramidPathException("s1==b1 mais m!=b1");
         } else {
             if (pv.b1 == pv.m)
-                return null;
+                throw new NoValidPyramidPathException("m==b1 mais s1!=b1");
+            if (pathS == null || pathT == null)
+                throw new NoValidPyramidPathException("paths null");
             if (g.containsEdge(pv.m, pv.b2) || g.containsEdge(pv.m, pv.b3) || g.containsEdge(pv.m, pv.s2)
-                || g.containsEdge(pv.m, pv.s3) || pathS == null || pathT == null)
-                return null;
+                    || g.containsEdge(pv.m, pv.s3))
+                throw new NoValidPyramidPathException("m adjacent ou paths null");
             if (pathS.getVertexList().stream().anyMatch(
-                t -> g.containsEdge(t, pv.b2) || g.containsEdge(t, pv.b3) || g.containsEdge(t, pv.s2)
-                    || g.containsEdge(t, pv.s3))
-                || pathT.getVertexList().stream().anyMatch(
-                    t -> t != pv.b1 && (g.containsEdge(t, pv.b2) || g.containsEdge(t, pv.b3)
-                        || g.containsEdge(t, pv.s2) || g.containsEdge(t, pv.s3))))
-                return null;
+                    t -> g.containsEdge(t, pv.b2) || g.containsEdge(t, pv.b3) || g.containsEdge(t, pv.s2)
+                            || g.containsEdge(t, pv.s3))
+                    || pathT.getVertexList().stream().anyMatch(
+                            t -> t != pv.b1 && (g.containsEdge(t, pv.b2) || g.containsEdge(t, pv.b3)
+                                    || g.containsEdge(t, pv.s2) || g.containsEdge(t, pv.s3))))
+                throw new NoValidPyramidPathException("path adjacent");
             List<V> intersection = intersectGraphPaths(pathS, pathT);
             if (intersection.size() != 1 || !intersection.contains(pv.m))
-                return null;
+                throw new NoValidPyramidPathException("intersection invalide");
             if (pathS.getVertexList().stream().anyMatch(
-                s -> s !=pv.m && pathT
-                    .getVertexList().stream().anyMatch(t -> t != pv.m && g.containsEdge(s, t))))
-                return null;
+                    s -> s != pv.m && pathT
+                            .getVertexList().stream().anyMatch(t -> t != pv.m && g.containsEdge(s, t))))
+                throw new NoValidPyramidPathException("paths se croisent");
             List<E> edgeList = new LinkedList<>();
             edgeList.addAll(pathT.getEdgeList());
             edgeList.addAll(pathS.getEdgeList());
@@ -874,8 +921,8 @@ public class BergeGraphInspector<V, E>
         }
     }
 
-    private void bfOddHoleCertificate(Graph<V, E> g)
-    {
+    private boolean bfOddHoleCertificate(Graph<V, E> g) {
+        boolean found = false;
         for (V start : g.vertexSet()) {
             if (g.degreeOf(start) < MIN_DEGREE_FOR_PYRAMID)
                 continue;
@@ -883,18 +930,17 @@ public class BergeGraphInspector<V, E>
             set.addAll(g.vertexSet());
             for (V neighborOfStart : g.vertexSet()) {
                 if (neighborOfStart == start || !g.containsEdge(start, neighborOfStart)
-                    || g.degreeOf(neighborOfStart) != MIN_DEGREE_FOR_PYRAMID)
+                        || g.degreeOf(neighborOfStart) != MIN_DEGREE_FOR_PYRAMID)
                     continue;
                 set.remove(neighborOfStart);
                 Graph<V, E> subg = new AsSubgraph<>(g, set);
                 for (V neighborsNeighbor : g.vertexSet()) {
                     if (neighborsNeighbor == start || neighborsNeighbor == neighborOfStart
-                        || !g.containsEdge(neighborsNeighbor, neighborOfStart)
-                        || g.containsEdge(neighborsNeighbor, start)
-                        || g.degreeOf(neighborsNeighbor) < MIN_DEGREE_FOR_PYRAMID)
+                            || !g.containsEdge(neighborsNeighbor, neighborOfStart)
+                            || g.containsEdge(neighborsNeighbor, start)
+                            || g.degreeOf(neighborsNeighbor) < MIN_DEGREE_FOR_PYRAMID)
                         continue;
-                    GraphPath<V, E> path =
-                        new DijkstraShortestPath<>(subg).getPath(start, neighborsNeighbor);
+                    GraphPath<V, E> path = new DijkstraShortestPath<>(subg).getPath(start, neighborsNeighbor);
                     if (path == null || path.getLength() < MIN_PATH_LENGTH || path.getLength() % EVEN == 0)
                         continue;
                     List<E> edgeList = new LinkedList<>();
@@ -903,14 +949,17 @@ public class BergeGraphInspector<V, E>
                     edgeList.add(g.getEdge(neighborOfStart, start));
                     double weight = edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                     certificate = new GraphWalk<>(g, start, start, edgeList, weight);
+                    found = true; // on a trouvé une cerificat
                     break;
+
                 }
-                if (certificate != null)
+                if (found)
                     break;
             }
-            if (certificate != null)
+            if (found)
                 break;
         }
+        return found;
     }
 
     /**
@@ -920,22 +969,20 @@ public class BergeGraphInspector<V, E>
      * @param f A vertex subset of g
      * @return Components of F in g
      */
-    private List<Set<V>> findAllComponents(Graph<V, E> g, Set<V> f)
-    {
+    private List<Set<V>> findAllComponents(Graph<V, E> g, Set<V> f) {
         return new ConnectivityInspector<>(new AsSubgraph<>(g, f)).connectedSets();
     }
 
     /**
      * Returns a path in g from start to end avoiding the vertices in X
      *
-     * @param g A Graph
+     * @param g     A Graph
      * @param start start vertex
-     * @param end end vertex
-     * @param x set of vertices which should not be in the graph
+     * @param end   end vertex
+     * @param x     set of vertices which should not be in the graph
      * @return A Path in G\X
      */
-    private GraphPath<V, E> getPathAvoidingX(Graph<V, E> g, V start, V end, Set<V> x)
-    {
+    private GraphPath<V, E> getPathAvoidingX(Graph<V, E> g, V start, V end, Set<V> x) {
         Set<V> vertexSet = new HashSet<>();
         vertexSet.addAll(g.vertexSet());
         vertexSet.removeAll(x);
@@ -946,15 +993,16 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     * Checks whether the vertex set of a graph without a vertex set X contains a shortest odd hole.
+     * Checks whether the vertex set of a graph without a vertex set X contains a
+     * shortest odd hole.
      * Running time: O(|V(g)|^4)
      *
      * @param g Graph containing neither pyramid nor jewel
      * @param x Subset of V(g) and a possible Cleaner for an odd hole
-     * @return Determines whether g has an odd hole such that X is a near-cleaner for it
+     * @return Determines whether g has an odd hole such that X is a near-cleaner
+     *         for it
      */
-    private boolean containsShortestOddHole(Graph<V, E> g, Set<V> x)
-    {
+    private boolean containsShortestOddHole(Graph<V, E> g, Set<V> x) {
         for (V y1 : g.vertexSet()) {
             if (x.contains(y1))
                 continue;
@@ -968,7 +1016,7 @@ public class BergeGraphInspector<V, E>
                         continue;
                     for (V x2 : g.vertexSet()) {
                         if (x2 == x3 || x2 == x1 || x2 == y1 || g.containsEdge(x2, x1)
-                            || !g.containsEdge(x3, x2))
+                                || !g.containsEdge(x3, x2))
                             continue;
 
                         GraphPath<V, E> rx2y1 = getPathAvoidingX(g, x2, y1, x);
@@ -980,8 +1028,7 @@ public class BergeGraphInspector<V, E>
                         V y2 = null;
                         for (V y2Candidate : rx2y1.getVertexList()) {
                             if (g.containsEdge(y1, y2Candidate) && y2Candidate != x1
-                                && y2Candidate != x2 && y2Candidate != x3 && y2Candidate != y1)
-                            {
+                                    && y2Candidate != x2 && y2Candidate != x3 && y2Candidate != y1) {
                                 y2 = y2Candidate;
                                 break;
                             }
@@ -993,10 +1040,9 @@ public class BergeGraphInspector<V, E>
                         GraphPath<V, E> rx3y2 = getPathAvoidingX(g, x3, y2, x);
                         GraphPath<V, E> rx1y2 = getPathAvoidingX(g, x1, y2, x);
                         if (rx3y1 != null && rx3y2 != null && rx1y2 != null
-                            && rx2y1.getLength() == (n = rx1y1.getLength() + 1)
-                            && n == rx1y2.getLength() && rx3y1.getLength() >= n
-                            && rx3y2.getLength() >= n)
-                        {
+                                && rx2y1.getLength() == (n = rx1y1.getLength() + 1)
+                                && n == rx1y2.getLength() && rx3y1.getLength() >= n
+                                && rx3y2.getLength() >= n) {
                             if (certify) {
                                 List<E> edgeList = new LinkedList<>();
                                 edgeList.addAll(rx1y1.getEdgeList());
@@ -1005,8 +1051,7 @@ public class BergeGraphInspector<V, E>
                                 edgeList.add(g.getEdge(x2, x3));
                                 edgeList.add(g.getEdge(x3, x1));
 
-                                double weight =
-                                    edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
+                                double weight = edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                                 certificate = new GraphWalk<>(g, x1, x1, edgeList, weight);
                             }
                             return true;
@@ -1019,28 +1064,29 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     * Checks whether a clean shortest odd hole is in g or whether X is a cleaner for an amenable
+     * Checks whether a clean shortest odd hole is in g or whether X is a cleaner
+     * for an amenable
      * shortest odd hole
      *
      * @param g A graph, containing no pyramid or jewel
      * @param x A subset X of V(g) and a possible Cleaner for an odd hole
-     * @return Returns whether g has an odd hole or there is no shortest odd hole in C such that X
+     * @return Returns whether g has an odd hole or there is no shortest odd hole in
+     *         C such that X
      *         is a near-cleaner for C.
      */
-    private boolean routine1(Graph<V, E> g, Set<V> x)
-    {
+    private boolean routine1(Graph<V, E> g, Set<V> x) {
         return containsCleanShortestOddHole(g) || containsShortestOddHole(g, x);
     }
 
     /**
-     * Checks whether a graph has a configuration of type T1. A configuration of type T1 in g is a
+     * Checks whether a graph has a configuration of type T1. A configuration of
+     * type T1 in g is a
      * hole of length 5
      *
      * @param g A Graph
      * @return whether g contains a configuration of Type T1 (5-cycle)
      */
-    private boolean hasConfigurationType1(Graph<V, E> g)
-    {
+    private boolean hasConfigurationType1(Graph<V, E> g) {
         for (V v1 : g.vertexSet()) {
             Set<V> temp = new ConnectivityInspector<>(g).connectedSetOf(v1);
             for (V v2 : temp) {
@@ -1051,12 +1097,12 @@ public class BergeGraphInspector<V, E>
                         continue;
                     for (V v4 : temp) {
                         if (v4 == v1 || v4 == v2 || v4 == v3 || g.containsEdge(v1, v4)
-                            || g.containsEdge(v2, v4) || !g.containsEdge(v3, v4))
+                                || g.containsEdge(v2, v4) || !g.containsEdge(v3, v4))
                             continue;
                         for (V v5 : temp) {
                             if (v5 == v1 || v5 == v2 || v5 == v3 || v5 == v4
-                                || g.containsEdge(v2, v5) || g.containsEdge(v3, v5)
-                                || !g.containsEdge(v1, v5) || !g.containsEdge(v4, v5))
+                                    || g.containsEdge(v2, v5) || g.containsEdge(v3, v5)
+                                    || !g.containsEdge(v1, v5) || !g.containsEdge(v4, v5))
                                 continue;
                             if (certify) {
                                 List<E> edgeList = new LinkedList<>();
@@ -1066,8 +1112,7 @@ public class BergeGraphInspector<V, E>
                                 edgeList.add(g.getEdge(v4, v5));
                                 edgeList.add(g.getEdge(v5, v1));
 
-                                double weight =
-                                    edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
+                                double weight = edgeList.stream().mapToDouble(g::getEdgeWeight).sum();
                                 certificate = new GraphWalk<>(g, v1, v1, edgeList, weight);
                             }
                             return true;
@@ -1087,15 +1132,14 @@ public class BergeGraphInspector<V, E>
      * @param y A set of vertices
      * @return List of anticomponents of Y in g
      */
-    private List<Set<V>> findAllAnticomponentsOfY(Graph<V, E> g, Set<V> y)
-    {
+    private List<Set<V>> findAllAnticomponentsOfY(Graph<V, E> g, Set<V> y) {
         Graph<V, E> target;
         if (g.getType().isSimple())
             target = new SimpleGraph<>(
-                g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
+                    g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
         else
             target = new Multigraph<>(
-                g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
+                    g.getVertexSupplier(), g.getEdgeSupplier(), g.getType().isWeighted());
         new ComplementGraphGenerator<>(g).generateGraph(target);
 
         return findAllComponents(target, y);
@@ -1104,61 +1148,61 @@ public class BergeGraphInspector<V, E>
     /**
      * Reports whether v has at least one neighbour in set
      *
-     * @param g A Graph
+     * @param g   A Graph
      * @param set A set of vertices
-     * @param v A vertex
+     * @param v   A vertex
      * @return whether v has at least one neighbour in set
      */
-    private boolean hasANeighbour(Graph<V, E> g, Set<V> set, V v)
-    {
+    private boolean hasANeighbour(Graph<V, E> g, Set<V> set, V v) {
         return set.stream().anyMatch(s -> g.containsEdge(s, v));
     }
 
     /**
-     * For each anticomponent X, find the maximal connected subset F' containing v5 with the
-     * properties that v1,v2 have no neighbours in F' and no vertex of F'\v5 is X-complete
+     * For each anticomponent X, find the maximal connected subset F' containing v5
+     * with the
+     * properties that v1,v2 have no neighbours in F' and no vertex of F'\v5 is
+     * X-complete
      *
-     * @param g A Graph
+     * @param g    A Graph
      * @param setX A set of vertices
-     * @param v1 A vertex
-     * @param v2 A vertex
-     * @param v5 A Vertex
-     * @return The maximal connected vertex subset containing v5, no neighbours of v1 and v2, and no
+     * @param v1   A vertex
+     * @param v2   A vertex
+     * @param v5   A Vertex
+     * @return The maximal connected vertex subset containing v5, no neighbours of
+     *         v1 and v2, and no
      *         X-complete vertex except v5
      */
-    private Set<V> findMaximalConnectedSubset(Graph<V, E> g, Set<V> setX, V v1, V v2, V v5)
-    {
+    private Set<V> findMaximalConnectedSubset(Graph<V, E> g, Set<V> setX, V v1, V v2, V v5) {
         Set<V> fPrime = new ConnectivityInspector<>(g).connectedSetOf(v5);
         fPrime.removeIf(
-            t -> t != v5 && isYXComplete(g, t, setX) || v1 == t || v2 == t || g.containsEdge(v1, t)
-                || g.containsEdge(v2, t));
+                t -> t != v5 && isYXComplete(g, t, setX) || v1 == t || v2 == t || g.containsEdge(v1, t)
+                        || g.containsEdge(v2, t));
         return fPrime;
     }
 
     /**
      * Reports whether a vertex has at least one nonneighbour in X
      *
-     * @param g A Graph
-     * @param v A Vertex
+     * @param g    A Graph
+     * @param v    A Vertex
      * @param setX A set of vertices
      * @return whether v has a nonneighbour in X
      */
-    private boolean hasANonneighbourInX(Graph<V, E> g, V v, Set<V> setX)
-    {
+    private boolean hasANonneighbourInX(Graph<V, E> g, V v, Set<V> setX) {
         return setX.stream().anyMatch(x -> !g.containsEdge(v, x));
     }
 
     /**
-     * If true, the graph is not Berge. Checks whether g contains a Pyramid, Jewel, configuration
+     * If true, the graph is not Berge. Checks whether g contains a Pyramid, Jewel,
+     * configuration
      * type 1, 2 or 3.
      *
      * @param g A Graph
      * @return whether g contains a pyramid, a jewel, a T1, a T2, or a T3
      */
-    private boolean routine2(Graph<V, E> g)
-    {
+    private boolean routine2(Graph<V, E> g) {
         return containsPyramid(g) || containsJewel(g) || hasConfigurationType1(g)
-            || hasConfigurationType2(g) || hasConfigurationType3(g);
+                || hasConfigurationType2(g) || hasConfigurationType3(g);
     }
 
     /**
@@ -1169,25 +1213,25 @@ public class BergeGraphInspector<V, E>
      * @param b A Vertex
      * @return The set of all {a,b}-complete vertices
      */
-    private Set<V> n(Graph<V, E> g, V a, V b)
-    {
+    private Set<V> n(Graph<V, E> g, V a, V b) {
         return g
-            .vertexSet().stream().filter(t -> g.containsEdge(t, a) && g.containsEdge(t, b))
-            .collect(Collectors.toSet());
+                .vertexSet().stream().filter(t -> g.containsEdge(t, a) && g.containsEdge(t, b))
+                .collect(Collectors.toSet());
     }
 
     /**
-     * r(a,b,c) is the cardinality of the largest anticomponent of N(a,b) that contains a
+     * r(a,b,c) is the cardinality of the largest anticomponent of N(a,b) that
+     * contains a
      * nonneighbour of c (or 0, if c is N(a,b)-complete)
      *
-     * @param g a Graph
+     * @param g   a Graph
      * @param nAB The set of all {a,b}-complete vertices
-     * @param c A vertex
-     * @return The cardinality of the largest anticomponent of N(a,b) that contains a nonneighbour
+     * @param c   A vertex
+     * @return The cardinality of the largest anticomponent of N(a,b) that contains
+     *         a nonneighbour
      *         of c (or 0, if c is N(a,b)-complete)
      */
-    private int r(Graph<V, E> g, Set<V> nAB, V c)
-    {
+    private int r(Graph<V, E> g, Set<V> nAB, V c) {
         if (isYXComplete(g, c, nAB))
             return 0;
         List<Set<V>> anticomponents = findAllAnticomponentsOfY(g, nAB);
@@ -1195,16 +1239,16 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     * Y(a,b,c) is the union of all anticomponents of N(a,b) that have cardinality strictly greater
+     * Y(a,b,c) is the union of all anticomponents of N(a,b) that have cardinality
+     * strictly greater
      * than r(a,b,c)
      *
-     * @param g A graph
+     * @param g   A graph
      * @param nAB The set of all {a,b}-complete vertices
-     * @param c A vertex
+     * @param c   A vertex
      * @return A Set of vertices with cardinality greater r(a,b,c)
      */
-    private Set<V> y(Graph<V, E> g, Set<V> nAB, V c)
-    {
+    private Set<V> y(Graph<V, E> g, Set<V> nAB, V c) {
         int cutoff = r(g, nAB, c);
         List<Set<V>> anticomponents = findAllAnticomponentsOfY(g, nAB);
         Set<V> res = new HashSet<>();
@@ -1219,13 +1263,12 @@ public class BergeGraphInspector<V, E>
     /**
      * W(a,b,c) is the anticomponent of N(a,b)+{c} that contains c
      *
-     * @param g A graph
+     * @param g   A graph
      * @param nAB The set of all {a,b}-complete vertices
-     * @param c A vertex
+     * @param c   A vertex
      * @return The anticomponent of N(a,b)+{c} containing c
      */
-    private Set<V> w(Graph<V, E> g, Set<V> nAB, V c)
-    {
+    private Set<V> w(Graph<V, E> g, Set<V> nAB, V c) {
         Set<V> temp = new HashSet<>();
         temp.addAll(nAB);
         temp.add(c);
@@ -1239,13 +1282,12 @@ public class BergeGraphInspector<V, E>
     /**
      * Z(a,b,c) is the set of all (Y(a,b,c)+W(a,b,c))-complete vertices
      *
-     * @param g A graph
+     * @param g   A graph
      * @param nAB The set of all {a,b}-complete vertices
-     * @param c A vertex
+     * @param c   A vertex
      * @return A set of vertices
      */
-    private Set<V> z(Graph<V, E> g, Set<V> nAB, V c)
-    {
+    private Set<V> z(Graph<V, E> g, Set<V> nAB, V c) {
         Set<V> temp = new HashSet<>();
         temp.addAll(y(g, nAB, c));
         temp.addAll(w(g, nAB, c));
@@ -1260,13 +1302,12 @@ public class BergeGraphInspector<V, E>
     /**
      * X(a,b,c)=Y(a,b,c)+Z(a,b,c)
      *
-     * @param g A graph
+     * @param g   A graph
      * @param nAB The set of all {a,b}-complete vertices
-     * @param c A vertex
+     * @param c   A vertex
      * @return The union of Y(a,b,c) and Z(a,b,c)
      */
-    private Set<V> x(Graph<V, E> g, Set<V> nAB, V c)
-    {
+    private Set<V> x(Graph<V, E> g, Set<V> nAB, V c) {
         Set<V> res = new HashSet<>();
         res.addAll(y(g, nAB, c));
         res.addAll(z(g, nAB, c));
@@ -1274,7 +1315,8 @@ public class BergeGraphInspector<V, E>
     }
 
     /**
-     * A triple (a,b,c) of vertices is relevant if a,b are distinct and nonadjacent, and c is not
+     * A triple (a,b,c) of vertices is relevant if a,b are distinct and nonadjacent,
+     * and c is not
      * contained in N(a,b) (possibly c is contained in {a,b}).
      *
      * @param g A graph
@@ -1283,19 +1325,18 @@ public class BergeGraphInspector<V, E>
      * @param c A vertex
      * @return Assessement whether a,b,c is a relevant triple
      */
-    private boolean isTripleRelevant(Graph<V, E> g, V a, V b, V c)
-    {
+    private boolean isTripleRelevant(Graph<V, E> g, V a, V b, V c) {
         return a != b && !g.containsEdge(a, b) && !n(g, a, b).contains(c);
     }
 
     /**
-     * Returns a set of vertex sets that may be near-cleaners for an amenable hole in g.
+     * Returns a set of vertex sets that may be near-cleaners for an amenable hole
+     * in g.
      *
      * @param g A graph
      * @return possible near-cleaners
      */
-    Set<Set<V>> routine3(Graph<V, E> g)
-    {
+    Set<Set<V>> routine3(Graph<V, E> g) {
         Set<Set<V>> nUVList = new HashSet<>();
         for (V u : g.vertexSet()) {
             for (V v : g.vertexSet()) {
