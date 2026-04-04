@@ -58,6 +58,76 @@ public class BergeGraphInspectorTest
     private int repititionsPerTestCase = 1;
 
     @Test
+    public void checkPyramidAndJewelTogether() {
+
+        stimulus.addVertex(1);
+        stimulus.addVertex(2);
+        stimulus.addVertex(3);
+        stimulus.addVertex(4);
+        stimulus.addVertex(5);
+        stimulus.addVertex(6);
+        stimulus.addVertex(7);
+        stimulus.addVertex(8);
+        stimulus.addVertex(9);
+        stimulus.addVertex(10);
+        stimulus.addVertex(11);
+        stimulus.addVertex(12);
+        stimulus.addVertex(13);
+        stimulus.addVertex(14);
+        stimulus.addVertex(15);
+        stimulus.addVertex(16);
+
+        stimulus.addEdge(1, 2);
+        stimulus.addEdge(2, 3);
+        stimulus.addEdge(3, 1);
+
+        stimulus.addEdge(4, 7);
+        stimulus.addEdge(5, 7);
+        stimulus.addEdge(6, 7);
+
+        stimulus.addEdge(8,11);
+        stimulus.addEdge(11,4);
+        stimulus.addEdge(9,12);
+        stimulus.addEdge(12,5);
+        stimulus.addEdge(10,13);
+        stimulus.addEdge(13,6);
+
+        stimulus.addEdge(1,14);
+        stimulus.addEdge(14,8);
+        stimulus.addEdge(2,15);
+        stimulus.addEdge(15,9);
+        stimulus.addEdge(3,16);
+        stimulus.addEdge(16,10);
+
+        assertTrue(dut.containsPyramid(stimulus));
+
+        stimulus.addVertex(17);
+        stimulus.addVertex(18);
+        stimulus.addVertex(19);
+        stimulus.addVertex(20);
+        stimulus.addVertex(21);
+        stimulus.addVertex(22);
+        stimulus.addVertex(23);
+        stimulus.addVertex(24);
+
+        stimulus.addEdge(17,18);
+        stimulus.addEdge(18,19);
+        stimulus.addEdge(19,20);
+        stimulus.addEdge(20,21);
+        stimulus.addEdge(21,17);
+
+        stimulus.addEdge(17,22);
+        stimulus.addEdge(22,23);
+        stimulus.addEdge(23,24);
+        stimulus.addEdge(24,20);
+
+        assertTrue(dut.containsJewel(stimulus));
+
+        dut.isBerge(stimulus, true);
+        assertNotNull(verifyCertificate(dut.getCertificate()));
+    }
+
+    @Test
     public void checkPyramid()
     {
         stimulus.addVertex(1);// b1
@@ -258,9 +328,9 @@ public class BergeGraphInspectorTest
          * Non-edges: stimulus.addEdge(1,3); stimulus.addEdge(2,4); stimulus.addEdge(1,5);
          * stimulus.addEdge(2,5); stimulus.addEdge(1,6); stimulus.addEdge(2,6);
          * stimulus.addEdge(4,5);
-         * 
+         *
          * Optional edges: stimulus.addEdge(3,5); stimulus.addEdge(3,6);
-         * 
+         *
          * stimulus.addEdge(5,6); implies non-edge stimulus.addEdge(6,7);
          */
 
@@ -273,7 +343,7 @@ public class BergeGraphInspectorTest
         /*
          * Non-edges either: stimulus.addEdge(3,7); or stimulus.addEdge(4,7); !! Note: one is to
          * choose, otherwise it is a 5-Cycle !!
-         * 
+         *
          * Optional edges if non-edge stimulus.addEdge(5,6); stimulus.addEdge(6,7);
          */
 
@@ -288,12 +358,12 @@ public class BergeGraphInspectorTest
 
         /*
          * Non-edges: stimulus.addEdge(1,9); stimulus.addEdge(2,9); stimulus.addEdge(7,9);
-         * 
+         *
          * Optional edges: stimulus.addEdge(1,8); stimulus.addEdge(2,8); stimulus.addEdge(3,8);
          * stimulus.addEdge(4,8); stimulus.addEdge(6,8); stimulus.addEdge(7,8);
          * stimulus.addEdge(8,10); stimulus.addEdge(3,9); stimulus.addEdge(4,9);
          * stimulus.addEdge(5,9); stimulus.addEdge(6,9);
-         * 
+         *
          */
 
         assertTrue(dut.hasConfigurationType3(stimulus));
