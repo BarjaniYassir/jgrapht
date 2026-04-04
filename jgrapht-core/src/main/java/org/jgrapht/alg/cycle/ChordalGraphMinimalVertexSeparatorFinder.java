@@ -134,15 +134,11 @@ public class ChordalGraphMinimalVertexSeparatorFinder<V, E>
                 previous = current;
                 current = getPredecessors(vertexInOrder, perfectEliminationOrder.get(i));
                 if (current.size() <= previous.size()) {
-                    // current set is a minimal separator
-                    if (minimalSeparatorsWithMultiplicities.containsKey(current)) {
-                        // found another vertex dependent on current set
-                        minimalSeparatorsWithMultiplicities
-                            .put(current, minimalSeparatorsWithMultiplicities.get(current) + 1);
-                    } else {
-                        // vertex at position i is the first vertex dependent on current set
-                        minimalSeparatorsWithMultiplicities.put(current, 1);
+                    Integer count = minimalSeparatorsWithMultiplicities.get(current);
+                    if (count == null) {
+                        count = 0;
                     }
+                    minimalSeparatorsWithMultiplicities.put(current, count + 1);
                 }
             }
         }
