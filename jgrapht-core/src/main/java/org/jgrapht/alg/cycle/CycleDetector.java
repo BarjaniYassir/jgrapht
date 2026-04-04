@@ -134,11 +134,15 @@ public class CycleDetector<V, E>
      */
     public Set<V> findCyclesContainingVertex(V v)
     {
-        Set<V> set = new LinkedHashSet<>();
-        execute(set, v);
-
-        return set;
+        return computeCyclesContainingVertex(v);
     }
+
+    private Set<V> computeCyclesContainingVertex(V v) {
+        Set<V> result = new LinkedHashSet<>();
+        execute(result, v);
+        return result;
+    }
+
 
     private void execute(Set<V> s, V v)
     {
