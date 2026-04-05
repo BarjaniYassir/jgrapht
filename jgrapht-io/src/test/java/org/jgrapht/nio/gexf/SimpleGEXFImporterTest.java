@@ -35,20 +35,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGEXFImporterTest
 {
 
     private static final String NL = System.lineSeparator();
-
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
     @Test
     public void testUndirectedUnweighted()
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -56,16 +57,16 @@ public class SimpleGEXFImporterTest
             + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
@@ -93,7 +94,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -106,16 +107,16 @@ public class SimpleGEXFImporterTest
             + "  </meta>" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
@@ -143,7 +144,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -151,16 +152,16 @@ public class SimpleGEXFImporterTest
             + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
             + "  <graph defaultedgetype=\"undirected\">" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"1\" label=\"1\"/>" + NL 
+            + "      <node id=\"1\" label=\"1\"/>" + NL
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
@@ -190,7 +191,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -201,15 +202,15 @@ public class SimpleGEXFImporterTest
             + "      <edge id=\"1\" source=\"v\" target=\"x\" />" + NL
             + "    </edges>" + NL
             + "    <nodes>" + NL
-            + "      <node id=\"u\" label=\"node-u\"/>" + NL 
+            + "      <node id=\"u\" label=\"node-u\"/>" + NL
             + "      <node id=\"v\" label=\"node-v\"/>" + NL
-            + "      <node id=\"x\" label=\"node-x\"/>" + NL 
+            + "      <node id=\"x\" label=\"node-x\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"2\" source=\"u\" target=\"v\" />" + NL            
+            + "      <edge id=\"2\" source=\"u\" target=\"v\" />" + NL
             + "      <edge id=\"3\" source=\"x\" target=\"u\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
@@ -241,33 +242,33 @@ public class SimpleGEXFImporterTest
         assertTrue(g.containsEdge("2", "0"));
 
         // check collected attributes
-        assertEquals(vertexAttrs.get(Pair.of("0", "ID")), DefaultAttribute.createAttribute("v"));
+        assertEquals(vertexAttrs.get(Pair.of("0", "ID")), factory.createString("v"));
         assertEquals(
-            vertexAttrs.get(Pair.of("0", "label")), DefaultAttribute.createAttribute("node-v"));
-        assertEquals(vertexAttrs.get(Pair.of("1", "ID")), DefaultAttribute.createAttribute("x"));
+            vertexAttrs.get(Pair.of("0", "label")), factory.createString("node-v"));
+        assertEquals(vertexAttrs.get(Pair.of("1", "ID")), factory.createString("x"));
         assertEquals(
-            vertexAttrs.get(Pair.of("1", "label")), DefaultAttribute.createAttribute("node-x"));
-        assertEquals(vertexAttrs.get(Pair.of("2", "ID")), DefaultAttribute.createAttribute("u"));
+            vertexAttrs.get(Pair.of("1", "label")), factory.createString("node-x"));
+        assertEquals(vertexAttrs.get(Pair.of("2", "ID")), factory.createString("u"));
         assertEquals(
-            vertexAttrs.get(Pair.of("2", "label")), DefaultAttribute.createAttribute("node-u"));
+            vertexAttrs.get(Pair.of("2", "label")), factory.createString("node-u"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "source")),
-            DefaultAttribute.createAttribute("v"));
+            factory.createString("v"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "target")),
-            DefaultAttribute.createAttribute("x"));
+            factory.createString("x"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("1", "2"), "source")),
-            DefaultAttribute.createAttribute("x"));
+            factory.createString("x"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("1", "2"), "target")),
-            DefaultAttribute.createAttribute("u"));
+            factory.createString("u"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("2", "0"), "source")),
-            DefaultAttribute.createAttribute("u"));
+            factory.createString("u"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("2", "0"), "target")),
-            DefaultAttribute.createAttribute("v"));
+            factory.createString("v"));
     }
 
     @Test
@@ -275,7 +276,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -286,10 +287,10 @@ public class SimpleGEXFImporterTest
             + "      <attribute id=\"0\" title=\"color\"  type=\"string\"/>" + NL
             + "      <attribute id=\"1\" title=\"city\"   type=\"liststring\"/>" + NL
             + "      <attribute id=\"2\" title=\"weight\" type=\"double\"/>" + NL
-            + "    </attributes>" + NL                
+            + "    </attributes>" + NL
             + "    <attributes class=\"edge\">" + NL
             + "      <attribute id=\"0\" title=\"length\" type=\"double\"/>" + NL
-            + "    </attributes>" + NL            
+            + "    </attributes>" + NL
             + "    <nodes>" + NL
             + "      <node id=\"1\">" + NL
             + "        <attvalues>" + NL
@@ -305,10 +306,10 @@ public class SimpleGEXFImporterTest
             + "          <attvalue for=\"1\" value=\"NY\"/>" + NL
             + "          <attvalue for=\"2\" value=\"200.0\"/>" + NL
             + "        </attvalues>" + NL
-            + "      </node>" + NL            
+            + "      </node>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"1\" source=\"2\" target=\"3\" weight=\"1.2\" />" + NL            
+            + "      <edge id=\"1\" source=\"2\" target=\"3\" weight=\"1.2\" />" + NL
             + "      <edge id=\"0\" source=\"1\" target=\"2\" weight=\"0.1\">" + NL
             + "        <attvalues>" + NL
             + "          <attvalue for=\"0\" value=\"333.0\"/>" + NL
@@ -316,7 +317,7 @@ public class SimpleGEXFImporterTest
             + "      </edge>" + NL
             + "      <edge id=\"1\" source=\"3\" target=\"1\" weight=\"2.0\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 
@@ -349,18 +350,18 @@ public class SimpleGEXFImporterTest
         assertEquals(0.1, g.getEdgeWeight(g.getEdge("0", "1")), 1e-9);
         assertEquals(2.0, g.getEdgeWeight(g.getEdge("2", "0")), 1e-9);
 
-        assertEquals(vertexAttrs.get(Pair.of("0", "ID")), DefaultAttribute.createAttribute("1"));
+        assertEquals(vertexAttrs.get(Pair.of("0", "ID")), factory.createString("1"));
         assertEquals(
-            vertexAttrs.get(Pair.of("0", "color")), DefaultAttribute.createAttribute("Red"));
+            vertexAttrs.get(Pair.of("0", "color")), factory.createString("Red"));
         assertEquals(
-            vertexAttrs.get(Pair.of("0", "city")), DefaultAttribute.createAttribute("Paris"));
+            vertexAttrs.get(Pair.of("0", "city")), factory.createString("Paris"));
         assertEquals(
             vertexAttrs.get(Pair.of("0", "weight")),
-            new DefaultAttribute<>("100.0", AttributeType.DOUBLE));
+            new factory<>("100.0", AttributeType.DOUBLE));
 
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "length")),
-            new DefaultAttribute<>("333.0", AttributeType.DOUBLE));
+            new factory<>("333.0", AttributeType.DOUBLE));
     }
 
     @Test
@@ -368,22 +369,22 @@ public class SimpleGEXFImporterTest
     {
         assertThrows(ImportException.class, () -> {
             // @formatter:off
-            String input = 
+            String input =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
                 + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
                 + "      version=\"1.2\" "
                 + "      xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" "
                 + "      xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" + NL
                 + "  <graph defaultedgetype=\"undirected\">" + NL
-                + "    <node id=\"1\" label=\"1\"/>" + NL 
+                + "    <node id=\"1\" label=\"1\"/>" + NL
                 + "    <node id=\"2\" label=\"2\"/>" + NL
-                + "    <node id=\"3\" label=\"3\"/>" + NL 
+                + "    <node id=\"3\" label=\"3\"/>" + NL
                 + "    <edges>" + NL
-                + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL            
+                + "      <edge id=\"1\" source=\"2\" target=\"3\" />" + NL
                 + "      <edge id=\"0\" source=\"1\" target=\"2\" />" + NL
                 + "      <edge id=\"1\" source=\"3\" target=\"1\" />" + NL
                 + "    </edges>" + NL
-                + "  </graph>" + NL 
+                + "  </graph>" + NL
                 + "</gexf>";
             // @formatter:on
 
@@ -403,7 +404,7 @@ public class SimpleGEXFImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
+        String input =
               "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
             + "<gexf xmlns=\"http://www.gexf.net/1.2draft\" "
             + "      version=\"1.2\" "
@@ -416,18 +417,18 @@ public class SimpleGEXFImporterTest
             + "          <node id=\"4\" label=\"4\"/>" + NL
             + "        </nodes>" + NL
             + "        <edges>" + NL
-            + "          <edge id=\"3\" source=\"3\" target=\"4\" />" + NL            
+            + "          <edge id=\"3\" source=\"3\" target=\"4\" />" + NL
             + "        </edges>" + NL
             + "      </node>"
             + "      <node id=\"2\" label=\"2\"/>" + NL
-            + "      <node id=\"3\" label=\"3\"/>" + NL 
+            + "      <node id=\"3\" label=\"3\"/>" + NL
             + "    </nodes>" + NL
             + "    <edges>" + NL
-            + "      <edge id=\"0\" source=\"2\" target=\"3\" />" + NL            
+            + "      <edge id=\"0\" source=\"2\" target=\"3\" />" + NL
             + "      <edge id=\"1\" source=\"1\" target=\"2\" />" + NL
             + "      <edge id=\"2\" source=\"3\" target=\"1\" />" + NL
             + "    </edges>" + NL
-            + "  </graph>" + NL 
+            + "  </graph>" + NL
             + "</gexf>";
         // @formatter:on
 

@@ -30,13 +30,13 @@ import java.util.Map.Entry;
 
 /**
  * Import a graph from a DOT file.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/DOT_language">
  * http://en.wikipedia.org/wiki/DOT_language</a> and
  * <a href="http://www.graphviz.org/doc/info/lang.html">
  * http://www.graphviz.org/doc/info/lang.html</a>
- * 
+ *
  * <p>
  * The importer notifies interested parties using consumers.
  *
@@ -67,7 +67,7 @@ public class DOTEventDrivenImporter
 
     /**
      * Constructs a new importer.
-     * 
+     *
      * @param notifyVertexAttributesOutOfOrder whether to notify for vertex attributes out-of-order
      *        even if they appear together in the input
      * @param notifyEdgeAttributesOutOfOrder whether to notify for edge attributes out-of-order even
@@ -210,7 +210,7 @@ public class DOTEventDrivenImporter
 
             if (idPartial != null) {
                 notifyGraphAttribute(
-                    DEFAULT_GRAPH_ID_KEY, DefaultAttribute.createAttribute(idPartial.getId()));
+                    DEFAULT_GRAPH_ID_KEY, factory.createAttribute(idPartial.getId()));
             }
 
             // add as child of parent
@@ -302,7 +302,7 @@ public class DOTEventDrivenImporter
                 if (child.ids != null && child.ids.size() == 1) {
                     s.put(child.ids.get(0), null);
                 } else if (child.ids != null && child.ids.size() >= 2) {
-                    s.put(child.ids.get(0), DefaultAttribute.createAttribute(child.ids.get(1)));
+                    s.put(child.ids.get(0), factory.createAttribute(child.ids.get(1)));
                 }
                 it.remove();
             }
@@ -400,9 +400,9 @@ public class DOTEventDrivenImporter
 
             // update attributes in current scope
             SubgraphScope scope = subgraphScopes.element();
-            scope.graphAttrs.put(key, DefaultAttribute.createAttribute(value));
+            scope.graphAttrs.put(key, factory.createAttribute(value));
             if (subgraphScopes.size() == 1) {
-                notifyGraphAttribute(key, DefaultAttribute.createAttribute(value));
+                notifyGraphAttribute(key, factory.createAttribute(value));
             }
         }
 

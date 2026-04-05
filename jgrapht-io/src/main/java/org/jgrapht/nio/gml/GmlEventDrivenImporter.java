@@ -30,17 +30,17 @@ import java.util.*;
 
 /**
  * Imports a graph from a GML file (Graph Modeling Language).
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://www.infosun.fmi.uni-passau.de/Graphlet/GML/">
  * http://www.infosun.fmi.uni-passau.de/Graphlet/GML/</a>.
  *
  * <p>
  * Below is small example of a graph in GML format.
- * 
+ *
  * <pre>
  * graph [
- *   node [ 
+ *   node [
  *     id 1
  *   ]
  *   node [
@@ -52,7 +52,7 @@ import java.util.*;
  *   ]
  *   edge [
  *     source 1
- *     target 2 
+ *     target 2
  *     weight 2.0
  *     label "Edge between 1 and 2"
  *   ]
@@ -64,35 +64,35 @@ import java.util.*;
  *   ]
  * ]
  * </pre>
- * 
+ *
  * <p>
  * If the input file contains edge weights then the importer also reads edge weights. The importer
  * also supports reading additional string attributes such as label or custom user attributes.
  * String attributes are unescaped as if they are Java strings.
- * 
+ *
  * <p>
  * The parser completely ignores elements from the input that are not related to vertices or edges
  * of the graph. Moreover, complicated nested structures are simply returned as a whole. For
  * example, in the following graph
- * 
+ *
  * <pre>
  * graph [
- *   node [ 
+ *   node [
  *     id 1
  *   ]
- *   node [ 
+ *   node [
  *     id 2
  *   ]
  *   edge [
  *     source 1
- *     target 2 
+ *     target 2
  *     points [ x 1.0 y 2.0 ]
  *   ]
  * ]
  * </pre>
- * 
+ *
  * the points attribute of the edge is returned as a string containing "[ x 1.0 y 2.0 ]".
- * 
+ *
  * @author Dimitrios Michail
  */
 public class GmlEventDrivenImporter
@@ -324,7 +324,7 @@ public class GmlEventDrivenImporter
                     Triple<Integer, Integer, Double> et = Triple.of(sourceId, targetId, weight);
                     notifyEdge(et);
                     if (weight != null) {
-                        notifyEdgeAttribute(et, WEIGHT, DefaultAttribute.createAttribute(weight));
+                        notifyEdgeAttribute(et, WEIGHT, factory.createAttribute(weight));
                     }
                     for (String attrKey : attributes.keySet()) {
                         notifyEdgeAttribute(et, attrKey, attributes.get(attrKey));
@@ -338,7 +338,7 @@ public class GmlEventDrivenImporter
                     stringBuffer.append(']');
                     attributes.put(
                         key,
-                        new DefaultAttribute<>(stringBuffer.toString(), AttributeType.UNKNOWN));
+                        new factory<>(stringBuffer.toString(), AttributeType.UNKNOWN));
                     stringBuffer = null;
                 } else if (level >= 3) {
                     stringBuffer.append(' ');
@@ -377,7 +377,7 @@ public class GmlEventDrivenImporter
                     throw new IllegalArgumentException("Invalid type for attribute weight: string");
                 }
 
-                attributes.put(key, DefaultAttribute.createAttribute(unescapedText));
+                attributes.put(key, factory.createAttribute(unescapedText));
             } else if (level >= 3) {
                 /*
                  * Inside a list. We simply concatenate everything here to allow the user to do
@@ -393,21 +393,21 @@ public class GmlEventDrivenImporter
         private Attribute parseNumberAttribute(String value)
         {
             try {
-                return DefaultAttribute.createAttribute(Integer.parseInt(value, 10));
+                return factory.createAttribute(Integer.parseInt(value, 10));
             } catch (NumberFormatException e) {
                 // ignore
             }
             try {
-                return DefaultAttribute.createAttribute(Long.parseLong(value, 10));
+                return factory.createAttribute(Long.parseLong(value, 10));
             } catch (NumberFormatException e) {
                 // ignore
             }
             try {
-                return DefaultAttribute.createAttribute(Double.parseDouble(value));
+                return factory.createAttribute(Double.parseDouble(value));
             } catch (NumberFormatException e) {
                 // ignore
             }
-            return DefaultAttribute.createAttribute(value);
+            return factory.createAttribute(value);
         }
 
     }

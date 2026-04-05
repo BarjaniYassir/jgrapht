@@ -42,6 +42,8 @@ public class GEXFExporterTest
 {
     private static final String NL = System.lineSeparator();
 
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
     // ~ Methods
     // ----------------------------------------------------------------
 
@@ -105,9 +107,9 @@ public class GEXFExporterTest
         graph.addEdge("v3", "v1");
 
         GEXFExporter<String, DefaultEdge> exporter = new GEXFExporter<>();
-        exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
-        exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_TYPES, true);
-        exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, true);
+        exporter.setParameter(Parameter.EXPORT_EDGE_WEIGHTS, true);
+        exporter.setParameter(Parameter.EXPORT_EDGE_TYPES, true);
+        exporter.setParameter(Parameter.EXPORT_EDGE_LABELS, true);
 
         exporter.registerAttribute("color", AttributeCategory.NODE, GEXFAttributeType.STRING, null);
         exporter.registerAttribute("city", AttributeCategory.NODE, GEXFAttributeType.STRING, null);
@@ -117,8 +119,8 @@ public class GEXFExporterTest
         exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
             if ("v1".equals(v)) {
-                map.put("color", DefaultAttribute.createAttribute("Red"));
-                map.put("city", DefaultAttribute.createAttribute("Paris"));
+                map.put("color", factory.createString("Red"));
+                map.put("city", factory.createString("Paris"));
             }
             return map;
         });
@@ -129,8 +131,8 @@ public class GEXFExporterTest
         exporter.setEdgeAttributeProvider(e -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
             if (e == e12) {
-                map.put("label", DefaultAttribute.createAttribute("Edge from node 1 to node 2"));
-                map.put("length", DefaultAttribute.createAttribute("100.0"));
+                map.put("label", factory.createString("Edge from node 1 to node 2"));
+                map.put("length", factory.createString("100.0"));
             }
             return map;
         });
@@ -207,8 +209,8 @@ public class GEXFExporterTest
         graph.setEdgeWeight(e31, 13.5d);
 
         GEXFExporter<String, DefaultEdge> exporter = new GEXFExporter<>();
-        exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, true);
-        exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_TYPES, true);
+        exporter.setParameter(Parameter.EXPORT_EDGE_WEIGHTS, true);
+        exporter.setParameter(Parameter.EXPORT_EDGE_TYPES, true);
         exporter.setDescription("Test");
 
         exporter.registerAttribute("color", AttributeCategory.NODE, GEXFAttributeType.STRING, null);
@@ -217,8 +219,8 @@ public class GEXFExporterTest
         exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
             if ("v1".equals(v)) {
-                map.put("color", DefaultAttribute.createAttribute("Red"));
-                map.put("city", DefaultAttribute.createAttribute("Paris"));
+                map.put("color", factory.createString("Red"));
+                map.put("city", factory.createString("Paris"));
             }
             return map;
         });
@@ -229,11 +231,11 @@ public class GEXFExporterTest
         exporter.setEdgeAttributeProvider(e -> {
             Map<String, Attribute> map = new HashMap<String, Attribute>();
             if (e == e12) {
-                map.put("label", DefaultAttribute.createAttribute("Edge from node 1 to node 2"));
-                map.put("length", DefaultAttribute.createAttribute("100.0"));
+                map.put("label", factory.createString("Edge from node 1 to node 2"));
+                map.put("length", factory.createString("100.0"));
             }
             if (e == e31) {
-                map.put("length", DefaultAttribute.createAttribute("30.0"));
+                map.put("length", factory.createString("30.0"));
             }
             return map;
         });

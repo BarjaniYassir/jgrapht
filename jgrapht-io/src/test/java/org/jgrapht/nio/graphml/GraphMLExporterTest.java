@@ -48,7 +48,8 @@ public class GraphMLExporterTest
     private static final String V3 = "v3";
 
     private static final String NL = System.lineSeparator();
-
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
     // ~ Methods
     // ----------------------------------------------------------------
 
@@ -470,7 +471,7 @@ public class GraphMLExporterTest
             Map<String, Attribute> map = new LinkedHashMap<>();
             map.put(
                 "custom_vertex_label",
-                DefaultAttribute.createAttribute("myvertex-" + String.valueOf(v)));
+                factory.createString("myvertex-" + String.valueOf(v)));
             return map;
         });
         exporter.setVertexLabelAttributeName("custom_vertex_label");
@@ -479,7 +480,7 @@ public class GraphMLExporterTest
             Map<String, Attribute> map = new LinkedHashMap<>();
             map.put(
                 "custom_edge_label",
-                DefaultAttribute.createAttribute("myedge-" + String.valueOf(e)));
+                factory.createString("myedge-" + String.valueOf(e)));
             return map;
         });
         exporter.setEdgeLabelAttributeName("custom_edge_label");
@@ -554,15 +555,15 @@ public class GraphMLExporterTest
             Map<String, Attribute> map = new LinkedHashMap<>();
             switch (v) {
             case V1:
-                map.put("color", DefaultAttribute.createAttribute("yellow"));
-                map.put("name", DefaultAttribute.createAttribute("V1"));
+                map.put("color", factory.createString("yellow"));
+                map.put("name", factory.createString("V1"));
                 break;
             case V2:
-                map.put("color", DefaultAttribute.createAttribute("red"));
-                map.put("name", DefaultAttribute.createAttribute("V2"));
+                map.put("color", factory.createString("red"));
+                map.put("name", factory.createString("V2"));
                 break;
             case V3:
-                map.put("name", DefaultAttribute.createAttribute("V3"));
+                map.put("name", factory.createString("V3"));
                 break;
             default:
                 break;
@@ -573,20 +574,20 @@ public class GraphMLExporterTest
         exporter.setEdgeAttributeProvider((e) -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
             if (e.equals(g.getEdge(V1, V2))) {
-                map.put("color", DefaultAttribute.createAttribute("what?"));
-                map.put("name", DefaultAttribute.createAttribute("e12"));
+                map.put("color", factory.createString("what?"));
+                map.put("name", factory.createString("e12"));
             } else if (e.equals(g.getEdge(V3, V1))) {
-                map.put("color", DefaultAttribute.createAttribute("I have no color!"));
-                map.put("name", DefaultAttribute.createAttribute("e31"));
+                map.put("color", factory.createString("I have no color!"));
+                map.put("name", factory.createString("e31"));
             }
             return map;
         });
 
         exporter.setExportEdgeWeights(true);
         exporter.registerAttribute(
-            "color", GraphMLExporter.AttributeCategory.NODE, AttributeType.STRING, "yellow");
+            "color", AttributeCategory.NODE, AttributeType.STRING, "yellow");
         exporter.registerAttribute(
-            "name", GraphMLExporter.AttributeCategory.ALL, AttributeType.STRING, "johndoe");
+            "name", AttributeCategory.ALL, AttributeType.STRING, "johndoe");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), UTF_8);

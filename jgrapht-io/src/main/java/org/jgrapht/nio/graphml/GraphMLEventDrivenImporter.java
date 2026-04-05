@@ -34,22 +34,22 @@ import java.util.Map.*;
 
 /**
  * Imports a graph from a GraphML data source.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  * http://en.wikipedia.org/wiki/ GraphML</a> or the
  * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GraphML format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
- * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
  *   <key id="d0" for="node" attr.name="color" attr.type="string">
  *     <default>yellow</default>
@@ -89,15 +89,15 @@ import java.util.Map.*;
  * </graphml>
  * }
  * </pre>
- * 
+ *
  * <p>
  * In case the corresponding edge key with attr.name="weight" is defined, the importer also reads
  * edge weights. Otherwise edge weights are ignored.
- * 
+ *
  * <p>
  * GraphML-Attributes Values are read as string key-value pairs and passed using vertex and edge
  * attribute consumers.
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
@@ -128,7 +128,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -138,7 +138,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
@@ -151,7 +151,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -161,7 +161,7 @@ public class GraphMLEventDrivenImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -293,11 +293,11 @@ public class GraphMLEventDrivenImporter
                     if (collectedAttributes.containsKey(validId)) {
                         finalAttributes.put(
                             validKey.attributeName,
-                            new DefaultAttribute<>(collectedAttributes.get(validId), validType));
+                            new factory<>(collectedAttributes.get(validId), validType));
                     } else if (validKey.defaultValue != null) {
                         finalAttributes.put(
                             validKey.attributeName,
-                            new DefaultAttribute<>(validKey.defaultValue, validType));
+                            new factory<>(validKey.defaultValue, validType));
                     }
                 }
 
@@ -352,12 +352,12 @@ public class GraphMLEventDrivenImporter
                     if (collectedAttributes.containsKey(validId)) {
                         finalAttributes.put(
                             validKey.attributeName,
-                            new DefaultAttribute<>(collectedAttributes.get(validId), validType));
+                            new factory<>(collectedAttributes.get(validId), validType));
                     } else {
                         if (validKey.defaultValue != null) {
                             finalAttributes.put(
                                 validKey.attributeName,
-                                new DefaultAttribute<>(validKey.defaultValue, validType));
+                                new factory<>(validKey.defaultValue, validType));
                         }
                     }
                 }

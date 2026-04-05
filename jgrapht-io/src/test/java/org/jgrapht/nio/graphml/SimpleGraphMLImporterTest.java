@@ -33,33 +33,34 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGraphMLImporterTest
 {
 
     private static final String NL = System.lineSeparator();
-
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
     @Test
     public void testUndirectedUnweighted()
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -87,20 +88,20 @@ public class SimpleGraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"2\" target=\"3\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"2\" target=\"3\"/>" + NL +
             "<node id=\"1\"/>" + NL +
-            "<node id=\"2\"/>" + NL + 
-            "<node id=\"3\"/>" + NL +  
-            "<edge source=\"1\" target=\"2\"/>" + NL + 
-            "<edge source=\"3\" target=\"1\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"2\"/>" + NL +
+            "<node id=\"3\"/>" + NL +
+            "<edge source=\"1\" target=\"2\"/>" + NL +
+            "<edge source=\"3\" target=\"1\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -130,20 +131,20 @@ public class SimpleGraphMLImporterTest
         throws ImportException
     {
         // @formatter:off
-        String input = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+        String input =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-            "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
-            "<edge source=\"v\" target=\"x\"/>" + NL + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+            "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
+            "<edge source=\"v\" target=\"x\"/>" + NL +
             "<node id=\"u\"/>" + NL +
-            "<node id=\"v\"/>" + NL + 
-            "<node id=\"x\"/>" + NL +  
-            "<edge source=\"u\" target=\"v\"/>" + NL + 
-            "<edge source=\"x\" target=\"u\"/>"+ NL + 
-            "</graph>" + NL + 
+            "<node id=\"v\"/>" + NL +
+            "<node id=\"x\"/>" + NL +
+            "<edge source=\"u\" target=\"v\"/>" + NL +
+            "<edge source=\"x\" target=\"u\"/>"+ NL +
+            "</graph>" + NL +
             "</graphml>";
         // @formatter:on
 
@@ -175,27 +176,27 @@ public class SimpleGraphMLImporterTest
         assertTrue(g.containsEdge("2", "0"));
 
         // check collected attributes
-        assertEquals(vertexAttrs.get(Pair.of("0", "id")), DefaultAttribute.createAttribute("v"));
-        assertEquals(vertexAttrs.get(Pair.of("1", "id")), DefaultAttribute.createAttribute("x"));
-        assertEquals(vertexAttrs.get(Pair.of("2", "id")), DefaultAttribute.createAttribute("u"));
+        assertEquals(vertexAttrs.get(Pair.of("0", "id")), factory.createString("v"));
+        assertEquals(vertexAttrs.get(Pair.of("1", "id")), factory.createString("x"));
+        assertEquals(vertexAttrs.get(Pair.of("2", "id")), factory.createString("u"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "source")),
-            DefaultAttribute.createAttribute("v"));
+            factory.createString("v"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "target")),
-            DefaultAttribute.createAttribute("x"));
+            factory.createString("x"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("1", "2"), "source")),
-            DefaultAttribute.createAttribute("x"));
+            factory.createString("x"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("1", "2"), "target")),
-            DefaultAttribute.createAttribute("u"));
+            factory.createString("u"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("2", "0"), "source")),
-            DefaultAttribute.createAttribute("u"));
+            factory.createString("u"));
         assertEquals(
             edgeAttrs.get(Pair.of(g.getEdge("2", "0"), "target")),
-            DefaultAttribute.createAttribute("v"));
+            factory.createString("v"));
     }
 
     @Test
@@ -205,9 +206,9 @@ public class SimpleGraphMLImporterTest
         // @formatter:off
         String input =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + NL +
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " + 
+            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" " +
             "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
+            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
             "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
             "<key id=\"d0\" for=\"node\" attr.name=\"color\" attr.type=\"string\"/>" + NL +
             "<key id=\"d1\" for=\"edge\" attr.name=\"weight\" attr.type=\"double\"/>" + NL +
@@ -272,17 +273,17 @@ public class SimpleGraphMLImporterTest
     {
         assertThrows(ImportException.class, () -> {
             // @formatter:off
-            String input = 
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL + 
-                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +  
+            String input =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL +
+                "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\"" + NL +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" + NL +
-                "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " + 
-                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL + 
-                "<graph id=\"G\" edgedefault=\"undirected\">" + NL + 
+                "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns " +
+                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">" + NL +
+                "<graph id=\"G\" edgedefault=\"undirected\">" + NL +
                 "<nOde id=\"1\"/>" + NL +
-                "<node id=\"2\"/>" + NL + 
-                "<myedge source=\"1\" target=\"2\"/>" + NL + 
-                "</graph>" + NL + 
+                "<node id=\"2\"/>" + NL +
+                "<myedge source=\"1\" target=\"2\"/>" + NL +
+                "</graph>" + NL +
                 "</graphml>";
             // @formatter:on
 
@@ -393,18 +394,18 @@ public class SimpleGraphMLImporterTest
         assertTrue(g.containsVertex("1"));
         assertTrue(g.containsEdge("0", "1"));
 
-        assertEquals(DefaultAttribute.createAttribute("green"), graphAttrs.get("color"));
-        assertEquals(DefaultAttribute.createAttribute("undirected"), graphAttrs.get("edgedefault"));
-        assertEquals(DefaultAttribute.createAttribute("n0"), vertexAttrs.get(Pair.of("0", "id")));
-        assertEquals(DefaultAttribute.createAttribute("n1"), vertexAttrs.get(Pair.of("1", "id")));
+        assertEquals(factory.createString("green"), graphAttrs.get("color"));
+        assertEquals(factory.createString("undirected"), graphAttrs.get("edgedefault"));
+        assertEquals(factory.createString("n0"), vertexAttrs.get(Pair.of("0", "id")));
+        assertEquals(factory.createString("n1"), vertexAttrs.get(Pair.of("1", "id")));
         assertEquals(
-            DefaultAttribute.createAttribute("e1"),
+            factory.createString("e1"),
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "id")));
         assertEquals(
-            DefaultAttribute.createAttribute("n0"),
+            factory.createString("n0"),
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "source")));
         assertEquals(
-            DefaultAttribute.createAttribute("n1"),
+            factory.createString("n1"),
             edgeAttrs.get(Pair.of(g.getEdge("0", "1"), "target")));
     }
 

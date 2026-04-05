@@ -40,20 +40,20 @@ import java.util.*;
  * attributes in the input file. Users can register consumers for vertex, edge and graph attributes
  * after construction of the importer. Finally, default attribute values and any nested elements are
  * completely ignored.
- * 
+ *
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GEXF
  * specification, oriented towards parsing speed.
- * 
+ *
  * <p>
  * For a description of the format see <a href="https://gephi.org/gexf/format/index.html">
  * https://gephi.org/gexf/format/index.html</a> or the
  * <a href="https://gephi.org/gexf/format/primer.html">GEXF Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GEXF format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
@@ -83,13 +83,13 @@ import java.util.*;
  * </gexf>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.2draft
  * <a href="https://gephi.org/gexf/1.2draft/gexf.xsd">GEXF Schema</a>. The user can (not
  * recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}. Older
  * schemas are not supported.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGEXFEventDrivenImporter
@@ -111,7 +111,7 @@ public class SimpleGEXFEventDrivenImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -121,7 +121,7 @@ public class SimpleGEXFEventDrivenImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -264,7 +264,7 @@ public class SimpleGEXFEventDrivenImporter
                 if (insideGraph == 1) {
                     for (String attrName : GRAPH_ATTRS) {
                         findAttribute(attrName, attributes).ifPresent(value -> {
-                            notifyGraphAttribute(attrName, DefaultAttribute.createAttribute(value));
+                            notifyGraphAttribute(attrName, factory.createAttribute(value));
                         });
                     }
                 }
@@ -279,7 +279,7 @@ public class SimpleGEXFEventDrivenImporter
                     for (String attrName : NODE_ATTRS) {
                         findAttribute(attrName, attributes).ifPresent(value -> {
                             notifyVertexAttribute(
-                                currentNode, attrName, DefaultAttribute.createAttribute(value));
+                                currentNode, attrName, factory.createAttribute(value));
                         });
                     }
                 }
@@ -308,22 +308,22 @@ public class SimpleGEXFEventDrivenImporter
 
                     if (edgeId != null) {
                         notifyEdgeAttribute(
-                            currentEdge, EDGE_ID, DefaultAttribute.createAttribute(edgeId));
+                            currentEdge, EDGE_ID, factory.createAttribute(edgeId));
                     }
                     notifyEdgeAttribute(
-                        currentEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(sourceId));
+                        currentEdge, EDGE_SOURCE, factory.createAttribute(sourceId));
                     notifyEdgeAttribute(
-                        currentEdge, EDGE_TARGET, DefaultAttribute.createAttribute(targetId));
+                        currentEdge, EDGE_TARGET, factory.createAttribute(targetId));
 
                     if (edgeWeightAsDouble != null) {
                         notifyEdgeAttribute(
                             currentEdge, "weight",
-                            DefaultAttribute.createAttribute(edgeWeightAsDouble));
+                            factory.createAttribute(edgeWeightAsDouble));
                     }
                     for (String attrName : EDGE_ATTRS) {
                         findAttribute(attrName, attributes).ifPresent(value -> {
                             notifyEdgeAttribute(
-                                currentEdge, attrName, DefaultAttribute.createAttribute(value));
+                                currentEdge, attrName, factory.createAttribute(value));
                         });
                     }
                 }
@@ -371,12 +371,12 @@ public class SimpleGEXFEventDrivenImporter
                         Attribute attr = nodeValidAttributes.get(attValueFor);
                         notifyVertexAttribute(
                             currentNode, attr.title,
-                            new DefaultAttribute<>(attValueValue, toAttributeType(attr.type)));
+                            new factory<>(attValueValue, toAttributeType(attr.type)));
                     } else if (insideEdge == 1 && currentEdge != null) {
                         Attribute attr = edgeValidAttributes.get(attValueFor);
                         notifyEdgeAttribute(
                             currentEdge, attr.title,
-                            new DefaultAttribute<>(attValueValue, toAttributeType(attr.type)));
+                            new factory<>(attValueValue, toAttributeType(attr.type)));
                     }
                 }
                 break;

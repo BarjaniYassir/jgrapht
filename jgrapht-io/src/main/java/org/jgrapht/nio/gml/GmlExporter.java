@@ -325,12 +325,12 @@ public class GmlExporter<V, E>
 
             if (exportEdgeLabels) {
                 Attribute label = getEdgeAttribute(edge, LABEL_ATTRIBUTE_KEY)
-                    .orElse(DefaultAttribute.createAttribute(edge.toString()));
+                    .orElse(factory.createAttribute(edge.toString()));
                 exportAttribute(out, "label", label);
             }
             if (exportEdgeWeights && g.getType().isWeighted()) {
                 exportAttribute(
-                    out, "weight", DefaultAttribute.createAttribute(g.getEdgeWeight(edge)));
+                    out, "weight", factory.createAttribute(g.getEdgeWeight(edge)));
             }
             if (exportCustomEdgeAttributes) {
                 getEdgeAttributes(edge).ifPresent(edgeAttributes -> {

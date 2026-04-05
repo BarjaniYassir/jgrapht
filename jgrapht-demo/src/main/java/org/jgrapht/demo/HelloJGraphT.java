@@ -154,7 +154,7 @@ public final class HelloJGraphT
             new DOTExporter<>(v -> v.getHost().replace('.', '_'));
         exporter.setVertexAttributeProvider((v) -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
-            map.put("label", DefaultAttribute.createAttribute(v.toString()));
+            map.put("label", factory.createAttribute(v.toString()));
             return map;
         });
         Writer writer = new StringWriter();

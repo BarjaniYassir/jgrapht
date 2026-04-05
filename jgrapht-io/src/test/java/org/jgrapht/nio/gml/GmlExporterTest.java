@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests
- * 
+ *
  * @author John V. Sichi
  * @author Dimitrios Michail
  */
@@ -120,33 +120,33 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t\tweight 2.0" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t\tweight 5.0" + NL
             + "\t]" + NL
             + "]" + NL;
-    
+
     private static final String UNDIRECTED_WEIGHTED_WITH_EDGE_LABELS
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
@@ -155,19 +155,19 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
@@ -175,15 +175,15 @@ public class GmlExporterTest
             + "\t\tweight 2.0" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
-            + "\t\tlabel \"(v3 : v1)\"" + NL            
+            + "\t\tlabel \"(v3 : v1)\"" + NL
             + "\t\tweight 5.0" + NL
             + "\t]" + NL
             + "]" + NL;
-    
+
     private static final String UNDIRECTED_WITH_VERTEX_LABELS
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
@@ -192,34 +192,34 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
-            + "\t\tlabel \"v1\"" + NL            
+            + "\t\tlabel \"v1\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
-            + "\t\tlabel \"v2\"" + NL            
+            + "\t\tlabel \"v2\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
-            + "\t\tlabel \"v3\"" + NL            
+            + "\t\tlabel \"v3\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t]" + NL
             + "]" + NL;
-    
+
     private static final String UNDIRECTED_WITH_VERTEX_LABELS_AND_CUSTOM_ATTRIBUTES
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
@@ -228,19 +228,19 @@ public class GmlExporterTest
             + "\tlabel \"\"" + NL
             + "\tdirected 0" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tlabel \"v1\"" + NL
             + "\t\tcolor \"red\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tlabel \"v2\"" + NL
             + "\t\tcolor \"black\"" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t\tlabel \"v3\"" + NL
             + "\t\tcost 5.5" + NL
@@ -248,79 +248,82 @@ public class GmlExporterTest
             + "\t\tvisited \"false\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t\tname \"first edge\"" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t]" + NL
-            + "]" + NL;    
-    
+            + "]" + NL;
+
     private static final String DIRECTED
             = "Creator \"JGraphT GML Exporter\"" + NL
             + "Version 1" + NL
             + "graph" + NL
-            + "[" + NL            
+            + "[" + NL
             + "\tlabel \"\"" + NL
             + "\tdirected 1" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 4" + NL
             + "\t]" + NL
             + "\tnode" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 5" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 1" + NL
             + "\t\tsource 1" + NL
             + "\t\ttarget 2" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 2" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 1" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 3" + NL
             + "\t\tsource 2" + NL
             + "\t\ttarget 3" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 4" + NL
             + "\t\tsource 3" + NL
             + "\t\ttarget 4" + NL
             + "\t]" + NL
             + "\tedge" + NL
-            + "\t[" + NL            
+            + "\t[" + NL
             + "\t\tid 5" + NL
             + "\t\tsource 4" + NL
             + "\t\ttarget 5" + NL
             + "\t]" + NL
             + "]" + NL;
     // @formatter:on
+
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
 
     // ~ Methods
     // ----------------------------------------------------------------
@@ -357,7 +360,7 @@ public class GmlExporterTest
         GmlExporter<String, DefaultEdge> exporter = new GmlExporter<String, DefaultEdge>();
         exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_VERTEX_GRAPHICS_ATTRIBUTES, true);
         exporter.setEdgeIdProvider(new IntegerIdProvider<>());
-        exporter.setVertexGraphicsAttributeProvider(v -> Map.of("fill", DefaultAttribute.createAttribute("#FF0000")));
+        exporter.setVertexGraphicsAttributeProvider(v -> Map.of("fill", factory.createString("#FF0000")));
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         exporter.exportGraph(g, os);
         String res = new String(os.toByteArray(), UTF_8);
@@ -523,15 +526,15 @@ public class GmlExporterTest
         exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new HashMap<>();
             if (v.equals(V1)) {
-                map.put("color", DefaultAttribute.createAttribute("red"));
+                map.put("color", factory.createString("red"));
             }
             if (v.equals(V2)) {
-                map.put("color", DefaultAttribute.createAttribute("black"));
+                map.put("color", factory.createString("black"));
             }
             if (v.equals(V3)) {
-                map.put("cost", DefaultAttribute.createAttribute(5.5d));
-                map.put("length", DefaultAttribute.createAttribute(100L));
-                map.put("visited", DefaultAttribute.createAttribute(false));
+                map.put("cost", factory.createDouble(5.5d));
+                map.put("length", factory.createLong(100L));
+                map.put("visited", factory.createBoolean(false));
             }
             return map;
         });
@@ -539,7 +542,7 @@ public class GmlExporterTest
         exporter.setEdgeAttributeProvider(e -> {
             Map<String, Attribute> map = new HashMap<>();
             if (e.equals(e1)) {
-                map.put("name", DefaultAttribute.createAttribute("first edge"));
+                map.put("name", factory.createString("first edge"));
             }
             return map;
         });
@@ -566,7 +569,7 @@ public class GmlExporterTest
             exporter.setVertexAttributeProvider(v -> {
                 Map<String, Attribute> map = new HashMap<>();
                 if (v.equals(V1)) {
-                    map.put("id", DefaultAttribute.createAttribute("custom-id"));
+                    map.put("id", factory.createString("custom-id"));
                 }
                 return map;
             });
@@ -594,7 +597,7 @@ public class GmlExporterTest
             exporter.setEdgeAttributeProvider(e -> {
                 Map<String, Attribute> map = new HashMap<>();
                 if (e.equals(e1)) {
-                    map.put("id", DefaultAttribute.createAttribute("id"));
+                    map.put("id", factory.createString("id"));
                 }
                 return map;
             });
@@ -622,7 +625,7 @@ public class GmlExporterTest
             exporter.setEdgeAttributeProvider(e -> {
                 Map<String, Attribute> map = new HashMap<>();
                 if (e.equals(e1)) {
-                    map.put("source", DefaultAttribute.createAttribute("source"));
+                    map.put("source", factory.createString("source"));
                 }
                 return map;
             });
@@ -650,7 +653,7 @@ public class GmlExporterTest
             exporter.setEdgeAttributeProvider(e -> {
                 Map<String, Attribute> map = new HashMap<>();
                 if (e.equals(e1)) {
-                    map.put("target", DefaultAttribute.createAttribute("target"));
+                    map.put("target", factory.createString("target"));
                 }
                 return map;
             });

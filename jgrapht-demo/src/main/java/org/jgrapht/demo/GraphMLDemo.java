@@ -185,9 +185,9 @@ public final class GraphMLDemo
         exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> m = new HashMap<>();
             if (v.getColor() != null) {
-                m.put("color", DefaultAttribute.createAttribute(v.getColor().toString()));
+                m.put("color", factory.createAttribute(v.getColor().toString()));
             }
-            m.put("name", DefaultAttribute.createAttribute("node-" + v.id));
+            m.put("name", factory.createAttribute("node-" + v.id));
             return m;
         });
 
@@ -203,7 +203,7 @@ public final class GraphMLDemo
          */
         exporter.setEdgeAttributeProvider(e -> {
             Map<String, Attribute> m = new HashMap<>();
-            m.put("name", DefaultAttribute.createAttribute(e.toString()));
+            m.put("name", factory.createAttribute(e.toString()));
             return m;
         });
 

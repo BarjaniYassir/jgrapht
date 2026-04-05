@@ -59,6 +59,9 @@ public class DOTExporterTest
         "}" + NL;
     // @formatter:on
 
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
+
     // ~ Methods ----------------------------------------------------------------
 
     @Test
@@ -85,10 +88,10 @@ public class DOTExporterTest
             Map<String, Attribute> map = new LinkedHashMap<>();
             switch (v) {
             case V1:
-                map.put("label", DefaultAttribute.createAttribute("a"));
+                map.put("label", factory.createString("a"));
                 break;
             case V2:
-                map.put("x", DefaultAttribute.createAttribute("y"));
+                map.put("x", factory.createString("y"));
                 break;
             default:
                 map = null;
@@ -116,8 +119,8 @@ public class DOTExporterTest
 
         exporter.setGraphAttributeProvider(() -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
-            map.put("overlap", DefaultAttribute.createAttribute("false"));
-            map.put("splines", DefaultAttribute.createAttribute("true"));
+            map.put("overlap", factory.createString("false"));
+            map.put("splines", factory.createString("true"));
             return map;
         });
 
@@ -161,7 +164,7 @@ public class DOTExporterTest
 
         exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
-            map.put("label", DefaultAttribute.createAttribute(v));
+            map.put("label", factory.createString(v));
             return map;
         });
 
@@ -183,7 +186,7 @@ public class DOTExporterTest
 
         exporter.setVertexAttributeProvider(v -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
-            map.put("label", new DefaultAttribute<>("<b>html label</b>", AttributeType.HTML));
+            map.put("label", new factory<>("<b>html label</b>", AttributeType.HTML));
             return map;
         });
 
@@ -227,18 +230,18 @@ public class DOTExporterTest
         g.addEdge(4, 5);
         g.addEdge(5, 2);
         Map<String, Attribute> graphAttributes = new HashMap<>(1);
-        graphAttributes.put("compound", DefaultAttribute.createAttribute("true"));
+        graphAttributes.put("compound", factory.createString("true"));
 
         // Subgraph and its attributes
         Set<Integer> vertices = new LinkedHashSet<>(Arrays.asList(1, 2, 3));
         Set<DefaultEdge> edges = new LinkedHashSet<>(Arrays.asList(e12, e13, e23));
         AsSubgraph<Integer, DefaultEdge> sg = new AsSubgraph<>(g, vertices, edges);
         Map<String, Attribute> subgraphAttributes = Map.of(
-            "pencolor", DefaultAttribute.createAttribute("transparent"));
+            "pencolor", factory.createString("transparent"));
         Map<String, Attribute> clusterAttributes = new LinkedHashMap<>();
-        clusterAttributes.put("label", DefaultAttribute.createAttribute(""));
-        clusterAttributes.put("shape", DefaultAttribute.createAttribute("point"));
-        clusterAttributes.put("style", DefaultAttribute.createAttribute("invis"));
+        clusterAttributes.put("label", factory.createString(""));
+        clusterAttributes.put("shape", factory.createString("point"));
+        clusterAttributes.put("style", factory.createString("invis"));
         DOTSubgraph<Integer, DefaultEdge> dotSubgraph = new DOTSubgraph<>(sg, subgraphAttributes, clusterAttributes);
         Map<String, DOTSubgraph<Integer, DefaultEdge>> subgraphs = Map.of("subg", dotSubgraph);
 

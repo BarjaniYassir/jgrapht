@@ -21,31 +21,26 @@ import java.io.*;
 
 /**
  * Default implementation of an attribute.
- * 
+ *
  * @param <T> the underlying type
- * 
+ *
  * @author Dimitrios Michail
  */
-public class DefaultAttribute<T>
+public class factory<T>
     implements Attribute, Serializable
 {
     private static final long serialVersionUID = 366113727410278952L;
-
-    /**
-     * The null attribute.
-     */
-    public static final Attribute NULL = new DefaultAttribute<>(null, AttributeType.NULL);
 
     private T value;
     private AttributeType type;
 
     /**
      * Create a new attribute
-     * 
+     *
      * @param value the value
      * @param type the type
      */
-    public DefaultAttribute(T value, AttributeType type)
+    public factory(T value, AttributeType type)
     {
         this.value = value;
         this.type = type;
@@ -53,7 +48,7 @@ public class DefaultAttribute<T>
 
     /**
      * Get the string value of the attribute
-     * 
+     *
      * @return the string value of the attribute
      */
     @Override
@@ -70,79 +65,13 @@ public class DefaultAttribute<T>
 
     /**
      * Get the type of the attribute
-     * 
+     *
      * @return the type of the attribute
      */
     @Override
     public AttributeType getType()
     {
         return type;
-    }
-
-    /**
-     * Create a boolean attribute
-     * 
-     * @param value the value
-     * @return the attribute
-     */
-    public static Attribute createAttribute(Boolean value)
-    {
-        return new DefaultAttribute<>(value, AttributeType.BOOLEAN);
-    }
-
-    /**
-     * Create an integer attribute
-     * 
-     * @param value the value
-     * @return the attribute
-     */
-    public static Attribute createAttribute(Integer value)
-    {
-        return new DefaultAttribute<>(value, AttributeType.INT);
-    }
-
-    /**
-     * Create a long attribute
-     * 
-     * @param value the value
-     * @return the attribute
-     */
-    public static Attribute createAttribute(Long value)
-    {
-        return new DefaultAttribute<>(value, AttributeType.LONG);
-    }
-
-    /**
-     * Create a float attribute
-     * 
-     * @param value the value
-     * @return the attribute
-     */
-    public static Attribute createAttribute(Float value)
-    {
-        return new DefaultAttribute<>(value, AttributeType.FLOAT);
-    }
-
-    /**
-     * Create a double attribute
-     * 
-     * @param value the value
-     * @return the attribute
-     */
-    public static Attribute createAttribute(Double value)
-    {
-        return new DefaultAttribute<>(value, AttributeType.DOUBLE);
-    }
-
-    /**
-     * Create a string attribute
-     * 
-     * @param value the value
-     * @return the attribute
-     */
-    public static Attribute createAttribute(String value)
-    {
-        return new DefaultAttribute<>(value, AttributeType.STRING);
     }
 
     @Override
@@ -164,7 +93,7 @@ public class DefaultAttribute<T>
             return false;
         if (getClass() != obj.getClass())
             return false;
-        DefaultAttribute<?> other = (DefaultAttribute<?>) obj;
+        factory<?> other = (factory<?>) obj;
         if (type != other.type)
             return false;
         if (value == null) {

@@ -43,27 +43,27 @@ import java.util.*;
  * later using the edge attribute consumer. Since the same triple instance is used in all cases, an
  * edge may appear having a null weight when it is first reported and having a non-null weight after
  * the edge weight is reported.
- * 
+ *
  * <p>
  * This is a simple implementation with supports only a limited set of features of the GraphML
  * specification. For a more rigorous parser use {@link GraphMLImporter}. This version is oriented
  * towards parsing speed.
- * 
+ *
  * <p>
  * For a description of the format see <a href="http://en.wikipedia.org/wiki/GraphML">
  * http://en.wikipedia.org/wiki/ GraphML</a> or the
  * <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html">GraphML Primer</a>.
  * </p>
- * 
+ *
  * <p>
  * Below is small example of a graph in GraphML format.
- * 
+ *
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8"?>
- * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"  
+ * <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
  *     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns 
+ *     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
  *     http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
  *   <key id="d0" for="node" attr.name="color" attr.type="string" />
  *   <key id="d1" for="edge" attr.name="weight" attr.type="double"/>
@@ -73,7 +73,7 @@ import java.util.*;
  *     </node>
  *     <node id="n1">
  *       <data key="d0">black</data>
- *     </node>     
+ *     </node>
  *     <node id="n2">
  *       <data key="d0">blue</data>
  *     </node>
@@ -105,12 +105,12 @@ import java.util.*;
  * </graphml>
  * }
  * </pre>
- * 
+ *
  * <p>
  * The importer by default validates the input using the 1.0
  * <a href="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">GraphML Schema</a>. The user can
  * (not recommended) disable the validation by calling {@link #setSchemaValidation(boolean)}.
- * 
+ *
  * @author Dimitrios Michail
  */
 public class SimpleGraphMLEventDrivenImporter
@@ -135,7 +135,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Get the attribute name for edge weights
-     * 
+     *
      * @return the attribute name
      */
     public String getEdgeWeightAttributeName()
@@ -145,7 +145,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Set the attribute name to use for edge weights.
-     * 
+     *
      * @param edgeWeightAttributeName the attribute name
      */
     public void setEdgeWeightAttributeName(String edgeWeightAttributeName)
@@ -156,7 +156,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Whether the importer validates the input
-     * 
+     *
      * @return true if the importer validates the input
      */
     public boolean isSchemaValidation()
@@ -166,7 +166,7 @@ public class SimpleGraphMLEventDrivenImporter
 
     /**
      * Set whether the importer should validate the input
-     * 
+     *
      * @param schemaValidation value for schema validation
      */
     public void setSchemaValidation(boolean schemaValidation)
@@ -302,10 +302,10 @@ public class SimpleGraphMLEventDrivenImporter
                 insideGraph++;
                 findAttribute(GRAPH_ID, attributes).ifPresent(
                     value -> notifyGraphAttribute(
-                        GRAPH_ID, DefaultAttribute.createAttribute(value)));
+                        GRAPH_ID, factory.createAttribute(value)));
                 findAttribute(GRAPH_EDGE_DEFAULT, attributes).ifPresent(
                     value -> notifyGraphAttribute(
-                        GRAPH_EDGE_DEFAULT, DefaultAttribute.createAttribute(value)));
+                        GRAPH_EDGE_DEFAULT, factory.createAttribute(value)));
                 break;
             case NODE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -318,7 +318,7 @@ public class SimpleGraphMLEventDrivenImporter
                 currentNode = nodeId;
                 notifyVertex(currentNode);
                 notifyVertexAttribute(
-                    currentNode, NODE_ID, DefaultAttribute.createAttribute(nodeId));
+                    currentNode, NODE_ID, factory.createAttribute(nodeId));
                 break;
             case EDGE:
                 if (insideNode > 0 || insideEdge > 0) {
@@ -335,12 +335,12 @@ public class SimpleGraphMLEventDrivenImporter
                 notifyEdge(currentEdge);
                 if (edgeId != null) {
                     notifyEdgeAttribute(
-                        currentEdge, EDGE_ID, DefaultAttribute.createAttribute(edgeId));
+                        currentEdge, EDGE_ID, factory.createAttribute(edgeId));
                 }
                 notifyEdgeAttribute(
-                    currentEdge, EDGE_SOURCE, DefaultAttribute.createAttribute(sourceId));
+                    currentEdge, EDGE_SOURCE, factory.createAttribute(sourceId));
                 notifyEdgeAttribute(
-                    currentEdge, EDGE_TARGET, DefaultAttribute.createAttribute(targetId));
+                    currentEdge, EDGE_TARGET, factory.createAttribute(targetId));
                 break;
             case KEY:
                 String keyId = findAttribute(KEY_ID, attributes)
@@ -380,7 +380,7 @@ public class SimpleGraphMLEventDrivenImporter
                 if (currentEdge != null && currentEdge.getThird() != null) {
                     notifyEdgeAttribute(
                         currentEdge, edgeWeightAttributeName,
-                        DefaultAttribute.createAttribute(currentEdge.getThird()));
+                        factory.createAttribute(currentEdge.getThird()));
                 }
                 currentEdge = null;
                 insideEdge--;
@@ -453,7 +453,7 @@ public class SimpleGraphMLEventDrivenImporter
                 if (key != null) {
                     notifyVertexAttribute(
                         currentNode, key.attributeName,
-                        new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                        new factory<>(currentDataValue.toString(), key.type));
                 }
             }
             if (currentEdge != null) {
@@ -471,7 +471,7 @@ public class SimpleGraphMLEventDrivenImporter
                     } else {
                         notifyEdgeAttribute(
                             currentEdge, key.attributeName,
-                            new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                            new factory<>(currentDataValue.toString(), key.type));
                     }
                 }
             }
@@ -480,7 +480,7 @@ public class SimpleGraphMLEventDrivenImporter
             if (key != null) {
                 notifyGraphAttribute(
                     key.attributeName,
-                    new DefaultAttribute<>(currentDataValue.toString(), key.type));
+                    new factory<>(currentDataValue.toString(), key.type));
             }
         }
 

@@ -36,7 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class JSONExporterTest
 {
-
+    // Factory pour créer les attributs
+    private static final DefaultAttributeFactory factory = new DefaultAttributeFactory();
     @Test
     public void testBasic()
         throws UnsupportedEncodingException
@@ -95,15 +96,15 @@ public class JSONExporterTest
             Map<String, Attribute> map = new LinkedHashMap<>();
             switch (v) {
             case 1:
-                map.put("color", DefaultAttribute.createAttribute("yellow"));
-                map.put("label", DefaultAttribute.createAttribute("V1"));
+                map.put("color", factory.createString("yellow"));
+                map.put("label", factory.createString("V1"));
                 break;
             case 2:
-                map.put("color", DefaultAttribute.createAttribute("red"));
-                map.put("label", DefaultAttribute.createAttribute("V2"));
+                map.put("color", factory.createString("red"));
+                map.put("label", factory.createString("V2"));
                 break;
             case 3:
-                map.put("label", DefaultAttribute.createAttribute("V3"));
+                map.put("label", factory.createString("V3"));
                 break;
             default:
                 break;
@@ -114,17 +115,17 @@ public class JSONExporterTest
         Function<DefaultWeightedEdge, Map<String, Attribute>> edgeAttributeProvider = e -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
             if (e.equals(e12)) {
-                map.put("color", DefaultAttribute.createAttribute("what?"));
-                map.put("label", DefaultAttribute.createAttribute("e12"));
-                map.put("weight", DefaultAttribute.createAttribute(graph.getEdgeWeight(e)));
+                map.put("color", factory.createString("what?"));
+                map.put("label", factory.createString("e12"));
+                map.put("weight", factory.createDouble(graph.getEdgeWeight(e)));
             } else if (e.equals(e13)) {
-                map.put("color", DefaultAttribute.createAttribute("I have no color!"));
-                map.put("label", DefaultAttribute.createAttribute("e13"));
-                map.put("weight", DefaultAttribute.createAttribute(graph.getEdgeWeight(e)));
+                map.put("color", factory.createString("I have no color!"));
+                map.put("label", factory.createString("e13"));
+                map.put("weight", factory.createDouble(graph.getEdgeWeight(e)));
             } else if (e.equals(e23)) {
-                map.put("color", DefaultAttribute.createAttribute("I have no color!"));
-                map.put("label", DefaultAttribute.createAttribute("e13"));
-                map.put("weight", DefaultAttribute.createAttribute(graph.getEdgeWeight(e)));
+                map.put("color", factory.createString("I have no color!"));
+                map.put("label", factory.createString("e13"));
+                map.put("weight", factory.createDouble(graph.getEdgeWeight(e)));
             }
             return map;
         };
@@ -164,12 +165,12 @@ public class JSONExporterTest
             Map<String, Attribute> map = new LinkedHashMap<>();
             switch (v) {
             case 1:
-                map.put("stringAttribute", DefaultAttribute.createAttribute("yellow"));
-                map.put("doubleAttribute", DefaultAttribute.createAttribute(3.4d));
-                map.put("intAttribute", DefaultAttribute.createAttribute(3));
-                map.put("floatAttribute", DefaultAttribute.createAttribute(3.4f));
-                map.put("longAttribute", DefaultAttribute.createAttribute(3l));
-                map.put("booleanAttribute", DefaultAttribute.createAttribute(true));
+                map.put("stringAttribute", factory.createString("yellow"));
+                map.put("doubleAttribute", factory.createDouble(3.4d));
+                map.put("intAttribute", factory.createInteger(3));
+                map.put("floatAttribute", factory.createFloat(3.4f));
+                map.put("longAttribute", factory.createLong(3l));
+                map.put("booleanAttribute", factory.createBoolean(true));
                 break;
             default:
                 break;
@@ -180,9 +181,9 @@ public class JSONExporterTest
         Function<DefaultWeightedEdge, Map<String, Attribute>> edgeAttributeProvider = e -> {
             Map<String, Attribute> map = new LinkedHashMap<>();
             if (e.equals(e12)) {
-                map.put("color", DefaultAttribute.createAttribute("what?"));
-                map.put("label", DefaultAttribute.createAttribute("e12"));
-                map.put("weight", DefaultAttribute.createAttribute(graph.getEdgeWeight(e)));
+                map.put("color", factory.createString("what?"));
+                map.put("label", factory.createString("e12"));
+                map.put("weight", factory.createDouble(graph.getEdgeWeight(e)));
             }
             return map;
         };
@@ -215,7 +216,7 @@ public class JSONExporterTest
                 Map<String, Attribute> map = new LinkedHashMap<>();
                 switch (v) {
                 case 1:
-                    map.put("NaNAttribute", DefaultAttribute.createAttribute(Double.NaN));
+                    map.put("NaNAttribute", factory.createDouble(Double.NaN));
                     break;
                 default:
                     break;
